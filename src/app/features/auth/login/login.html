@@ -1,0 +1,102 @@
+<div class="grid min-h-screen w-screen bg-app-bg lg:grid-cols-[1.25fr_0.9fr]">
+  <section class="relative hidden overflow-hidden bg-brand-blue px-10 py-8 text-white lg:block">
+    <div class="absolute inset-x-0 bottom-0 h-48 bg-white/90 [clip-path:ellipse(80%_55%_at_50%_100%)]"></div>
+    <div class="relative z-10 flex justify-end gap-3">
+      <a routerLink="/auth/login" class="rounded border border-white/30 bg-brand-blue-dark px-5 py-2 text-sm font-bold">Login</a>
+      <a routerLink="/auth/register" class="rounded border border-white/25 px-5 py-2 text-sm font-bold hover:bg-white/10">Sign Up</a>
+    </div>
+
+    <div class="relative z-10 mx-auto mt-14 max-w-2xl text-center">
+      <h1 class="text-5xl font-black tracking-normal">Momentum</h1>
+      <p class="mt-5 text-2xl text-blue-50">Construa habitos melhores, um dia por vez</p>
+    </div>
+
+    <div class="relative z-10 mx-auto mt-10 grid max-w-3xl grid-cols-[220px_1fr] items-center gap-8">
+      <div class="flex flex-col gap-4">
+        <div class="flex items-center gap-3 rounded bg-brand-blue-dark px-5 py-3 text-sm font-bold shadow-lg">
+          <span class="text-warning">★</span>
+          <span>Acompanhe seu progresso</span>
+        </div>
+        <div class="flex items-center gap-3 rounded bg-brand-blue-dark px-5 py-3 text-sm font-bold shadow-lg">
+          <span class="text-warning">★</span>
+          <span>Alcance seus objetivos</span>
+        </div>
+      </div>
+
+      <div class="relative h-64">
+        <div class="absolute bottom-8 left-24 h-28 w-48 rounded-t-md bg-white shadow-xl">
+          <div class="h-8 rounded-t-md bg-[#ff865f]"></div>
+          <div class="grid grid-cols-5 gap-2 p-4">
+            @for (item of [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]; track item) {
+              <span class="h-5 rounded-sm" [class]="item === 8 || item === 12 ? 'bg-[#ff865f]' : 'bg-[#d6e0ed]'"></span>
+            }
+          </div>
+        </div>
+        <div class="absolute bottom-4 left-14 h-28 w-8 rounded-full bg-brand-blue-dark"></div>
+        <div class="absolute bottom-8 left-11 h-24 w-10 rounded-t-full bg-[#ff865f]"></div>
+        <div class="absolute bottom-4 left-60 h-14 w-20 rounded-b-2xl bg-brand-blue-dark"></div>
+        <div class="absolute bottom-16 left-60 h-16 w-24 -rotate-12 rounded-full bg-[#5ac276]"></div>
+        <div class="absolute bottom-[4.5rem] left-[17.5rem] h-20 w-16 rotate-12 rounded-full bg-[#69cc86]"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="flex items-center justify-center p-5">
+    <div class="app-shadow w-full max-w-md bg-panel px-7 py-8 sm:px-10">
+      <div class="mb-7 text-center">
+        <h2 class="text-3xl font-black text-ink">Entrar</h2>
+        <p class="mt-2 text-sm text-muted-ink">Acesse sua conta para continuar</p>
+      </div>
+
+      @if (errorMessage(); as error) {
+        <div class="mb-5 border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {{ error }}
+        </div>
+      }
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+        <div>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            placeholder="Email"
+            class="h-12 w-full rounded border border-line bg-white px-4 text-sm text-ink outline-none transition focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/15"
+            [class.border-red-500]="isFieldInvalid('email')" />
+          @if (isFieldInvalid('email')) {
+            <span class="mt-1 block text-xs text-red-600">Insira um email valido</span>
+          }
+        </div>
+
+        <div>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            placeholder="Senha"
+            class="h-12 w-full rounded border border-line bg-white px-4 text-sm text-ink outline-none transition focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/15"
+            [class.border-red-500]="isFieldInvalid('password')" />
+          @if (isFieldInvalid('password')) {
+            <span class="mt-1 block text-xs text-red-600">A senha deve ter no minimo 6 caracteres</span>
+          }
+        </div>
+
+        <button
+          type="submit"
+          [disabled]="isLoading()"
+          class="mt-1 flex h-12 items-center justify-center rounded bg-brand-blue text-sm font-bold text-white transition hover:bg-brand-blue-dark disabled:pointer-events-none disabled:opacity-60">
+          @if (isLoading()) {
+            <span>Entrando...</span>
+          } @else {
+            <span>Login</span>
+          }
+        </button>
+      </form>
+
+      <div class="mt-6 border-t border-line pt-5 text-center text-sm text-muted-ink">
+        Nao tem uma conta?
+        <a routerLink="/auth/register" class="font-semibold text-brand-blue hover:underline">Criar conta</a>
+      </div>
+    </div>
+  </section>
+</div>

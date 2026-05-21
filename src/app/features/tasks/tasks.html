@@ -1,0 +1,33 @@
+<div class="mx-auto max-w-3xl">
+  <div class="app-shadow bg-panel p-5 sm:p-7">
+    <div class="mb-5 flex items-center justify-between">
+      <div>
+        <h2 class="text-2xl font-black text-ink">Modulo de Tarefas</h2>
+        <p class="text-sm text-muted-ink">Organize seu dia com a mesma linguagem visual dos habitos.</p>
+      </div>
+      <span class="rounded bg-brand-blue-soft px-3 py-1 text-xs font-bold text-brand-blue">Foundation</span>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      @for (task of [
+        { title: 'Arquitetura de Banco e Migrations', status: 'Concluido', done: true },
+        { title: 'Criar base do frontend e conectar API', status: 'Concluido nesta fase', done: true },
+        { title: 'Expandir o modulo de tarefas', status: 'Pendente', done: false }
+      ]; track task.title) {
+        <article class="flex items-center gap-4 border border-line bg-white px-4 py-3 shadow-sm" [class.opacity-70]="task.done">
+          <span
+            class="flex h-6 w-6 shrink-0 items-center justify-center rounded border text-xs font-black"
+            [class]="task.done ? 'border-success bg-success text-white' : 'border-line bg-panel-soft text-muted-ink'">
+            @if (task.done) {
+              OK
+            }
+          </span>
+          <div>
+            <p class="text-sm font-bold text-ink" [class.line-through]="task.done">{{ task.title }}</p>
+            <p class="text-xs text-muted-ink">{{ task.status }}</p>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</div>
