@@ -3,31 +3,40 @@
     routerLink="/dashboard"
     routerLinkActive="bg-white/10 text-white"
     [routerLinkActiveOptions]="{ exact: true }"
-    class="px-3 py-3 text-center">
+    class="px-3 py-3 text-center"
+  >
     Dashboard
   </a>
-  <a
-    routerLink="/tasks"
-    routerLinkActive="bg-white/10 text-white"
-    class="px-3 py-3 text-center">
+  <a routerLink="/tasks" routerLinkActive="bg-white/10 text-white" class="px-3 py-3 text-center">
     Tarefas
   </a>
-  <a
-    routerLink="/habits"
-    routerLinkActive="bg-white/10 text-white"
-    class="px-3 py-3 text-center">
+  <a routerLink="/habits" routerLinkActive="bg-white/10 text-white" class="px-3 py-3 text-center">
     Habitos
   </a>
 </nav>
 
-<aside class="hidden h-[calc(100vh-64px)] w-60 flex-col justify-between bg-brand-blue-dark py-4 text-white shadow-[6px_0_18px_rgba(35,63,102,0.12)] md:flex">
+<aside
+  class="hidden h-[calc(100vh-64px)] w-60 flex-col justify-between bg-brand-blue-dark py-4 text-white shadow-[6px_0_18px_rgba(35,63,102,0.12)] md:flex"
+>
   <nav class="flex flex-col">
-    <a 
-      routerLink="/dashboard" 
+    <a
+      routerLink="/dashboard"
       routerLinkActive="bg-white/10 text-white font-semibold"
       [routerLinkActiveOptions]="{ exact: true }"
-      class="group flex items-center gap-3 px-5 py-3 text-sm text-blue-100 transition-colors hover:bg-white/10 hover:text-white">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:scale-105">
+      class="group flex items-center gap-3 px-5 py-3 text-sm text-blue-100 transition-colors hover:bg-white/10 hover:text-white"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="transition-transform group-hover:scale-105"
+      >
         <rect x="3" y="3" width="7" height="9" rx="1"></rect>
         <rect x="14" y="3" width="7" height="5" rx="1"></rect>
         <rect x="14" y="12" width="7" height="9" rx="1"></rect>
@@ -36,22 +45,46 @@
       <span>Dashboard</span>
     </a>
 
-    <a 
-      routerLink="/tasks" 
+    <a
+      routerLink="/tasks"
       routerLinkActive="bg-white/10 text-white font-semibold"
-      class="group flex items-center gap-3 px-5 py-3 text-sm text-blue-100 transition-colors hover:bg-white/10 hover:text-white">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:scale-105">
+      class="group flex items-center gap-3 px-5 py-3 text-sm text-blue-100 transition-colors hover:bg-white/10 hover:text-white"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="transition-transform group-hover:scale-105"
+      >
         <polyline points="9 11 12 14 22 4"></polyline>
         <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
       </svg>
       <span>Tarefas</span>
     </a>
 
-    <a 
-      routerLink="/habits" 
+    <a
+      routerLink="/habits"
       routerLinkActive="bg-white/10 text-white font-semibold"
-      class="group flex items-center gap-3 px-5 py-3 text-sm text-blue-100 transition-colors hover:bg-white/10 hover:text-white">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:scale-105">
+      class="group flex items-center gap-3 px-5 py-3 text-sm text-blue-100 transition-colors hover:bg-white/10 hover:text-white"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="transition-transform group-hover:scale-105"
+      >
         <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
       </svg>
       <span>Hábitos</span>

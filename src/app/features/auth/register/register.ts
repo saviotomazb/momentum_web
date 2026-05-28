@@ -1,5 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -7,7 +15,7 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-register',
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
-  templateUrl: './register.html'
+  templateUrl: './register.html',
 })
 export class RegisterComponent {
   private readonly fb = inject(FormBuilder);
@@ -19,12 +27,15 @@ export class RegisterComponent {
   protected readonly errorMessage = signal<string | null>(null);
 
   constructor() {
-    this.registerForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]]
-    }, { validators: this.passwordsMatchValidator });
+    this.registerForm = this.fb.group(
+      {
+        name: ['', [Validators.required, Validators.minLength(2)]],
+        email: ['', [Validators.required, Validators.email]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', [Validators.required]],
+      },
+      { validators: this.passwordsMatchValidator },
+    );
   }
 
   onSubmit(): void {
@@ -45,9 +56,13 @@ export class RegisterComponent {
       },
       error: (err) => {
         this.isLoading.set(false);
-        const message = err.error?.message || err.error || err.message || 'Erro ao realizar cadastro. Tente novamente.';
+        const message =
+          err.error?.message ||
+          err.error ||
+          err.message ||
+          'Erro ao realizar cadastro. Tente novamente.';
         this.errorMessage.set(message);
-      }
+      },
     });
   }
 
@@ -58,10 +73,16 @@ export class RegisterComponent {
 
   protected hasPasswordMismatch(): boolean {
     const confirmPassword = this.registerForm.get('confirmPassword');
-    return !!(confirmPassword && confirmPassword.hasError('passwordMismatch') && (confirmPassword.dirty || confirmPassword.touched));
+    return !!(
+      confirmPassword &&
+      confirmPassword.hasError('passwordMismatch') &&
+      (confirmPassword.dirty || confirmPassword.touched)
+    );
   }
 
-  private passwordsMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  private passwordsMatchValidator: ValidatorFn = (
+    control: AbstractControl,
+  ): ValidationErrors | null => {
     const password = control.get('password');
     const confirmPassword = control.get('confirmPassword');
 

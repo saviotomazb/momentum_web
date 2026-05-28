@@ -1,0 +1,28 @@
+@if (habits.length) {
+  <div class="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+    @for (habit of habits; track habit.id) {
+      <app-habit-card
+        [habit]="habit"
+        [completing]="completingHabitId === habit.id"
+        (completeHabit)="completeHabit.emit($event)"
+        (editHabit)="editHabit.emit($event)"
+        (deleteHabit)="deleteHabit.emit($event)"
+      >
+      </app-habit-card>
+    }
+  </div>
+} @else {
+  <div
+    class="app-shadow flex min-h-72 flex-col items-center justify-center bg-panel p-8 text-center"
+  >
+    <div
+      class="flex h-14 w-14 items-center justify-center rounded bg-brand-blue-soft text-brand-blue"
+    >
+      +
+    </div>
+    <h3 class="mt-4 text-xl font-black text-ink">Nenhum habito criado</h3>
+    <p class="mt-2 max-w-md text-sm leading-6 text-muted-ink">
+      Crie seu primeiro habito para comecar a acompanhar streaks, conclusoes e progresso diario.
+    </p>
+  </div>
+}

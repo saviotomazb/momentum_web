@@ -6,7 +6,7 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-sidebar',
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
-  templateUrl: './sidebar.html'
+  templateUrl: './sidebar.html',
 })
 export class SidebarComponent {
   protected readonly authService = inject(AuthService);

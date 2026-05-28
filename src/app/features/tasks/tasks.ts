@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-tasks',
   standalone: true,
   imports: [],
-  templateUrl: './tasks.html'
+  templateUrl: './tasks.html',
 })
 export class TasksComponent {}

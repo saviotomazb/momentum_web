@@ -5,7 +5,7 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-navbar',
   standalone: true,
   imports: [],
-  templateUrl: './navbar.html'
+  templateUrl: './navbar.html',
 })
 export class NavbarComponent {
   protected readonly authService = inject(AuthService);

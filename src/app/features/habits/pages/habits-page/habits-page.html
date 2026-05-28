@@ -1,0 +1,136 @@
+<div class="mx-auto flex max-w-7xl flex-col gap-5">
+  <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <article class="app-shadow animate-fade-in bg-panel p-5">
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-bold text-muted-ink">Total Habits</span>
+        <lucide-icon [img]="icons.calendar" size="20" class="text-brand-blue"></lucide-icon>
+      </div>
+      <p class="mt-4 text-3xl font-black text-ink">{{ stats().totalHabits }}</p>
+      <p class="text-sm text-muted-ink">{{ stats().totalHabits === 1 ? 'habit' : 'habits' }}</p>
+    </article>
+
+    <article class="app-shadow animate-fade-in bg-panel p-5">
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-bold text-muted-ink">Completed Today</span>
+        <lucide-icon [img]="icons.chart" size="20" class="text-success"></lucide-icon>
+      </div>
+      <p class="mt-4 text-3xl font-black text-ink">{{ stats().completedToday }}</p>
+      <p class="text-sm text-muted-ink">completed</p>
+    </article>
+
+    <article class="app-shadow animate-fade-in bg-panel p-5">
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-bold text-muted-ink">Current Best Streak</span>
+        <lucide-icon [img]="icons.flame" size="20" class="text-[#f25f4c]"></lucide-icon>
+      </div>
+      <p class="mt-4 text-3xl font-black text-ink">{{ stats().bestStreak }}</p>
+      <p class="text-sm text-muted-ink">days</p>
+    </article>
+
+    <article class="app-shadow animate-fade-in bg-brand-blue-dark p-5 text-white">
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-bold text-blue-100">Completion Rate</span>
+        <span class="text-xs font-bold text-blue-100">Today</span>
+      </div>
+      <p class="mt-4 text-3xl font-black">{{ stats().completionRate }}%</p>
+      <div class="mt-3 h-2 overflow-hidden rounded bg-white/15">
+        <div
+          class="h-full bg-success transition-all duration-500"
+          [style.width.%]="stats().completionRate"
+        ></div>
+      </div>
+    </article>
+  </section>
+
+  <section
+    class="app-shadow flex flex-col gap-4 bg-panel p-5 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <div>
+      <h1 class="text-2xl font-black text-ink">Habitos</h1>
+      <p class="mt-1 text-sm text-muted-ink">
+        Crie, conclua e ajuste suas rotinas sem sair da tela.
+      </p>
+    </div>
+
+    <div class="flex gap-2">
+      <button
+        type="button"
+        (click)="loadHabits()"
+        class="flex h-10 w-10 items-center justify-center rounded border border-line text-muted-ink transition hover:bg-panel-soft"
+        title="Atualizar"
+      >
+        <lucide-icon
+          [img]="icons.refresh"
+          size="17"
+          [class.animate-spin]="isLoading()"
+        ></lucide-icon>
+      </button>
+
+      <button
+        type="button"
+        (click)="openCreateForm()"
+        class="flex h-10 items-center justify-center gap-2 rounded bg-brand-blue px-4 text-sm font-bold text-white transition hover:bg-brand-blue-dark"
+      >
+        <lucide-icon [img]="icons.plus" size="17"></lucide-icon>
+        <span>Create Habit</span>
+      </button>
+    </div>
+  </section>
+
+  @if (errorMessage(); as error) {
+    <div
+      class="flex items-center gap-3 border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700"
+    >
+      <lucide-icon [img]="icons.error" size="18"></lucide-icon>
+      <span>{{ error }}</span>
+    </div>
+  }
+
+  @if (showForm()) {
+    <app-habit-form
+      [habit]="selectedHabit()"
+      [submitting]="isSubmitting()"
+      (saveHabit)="saveHabit($event)"
+      (cancelForm)="closeForm()"
+    >
+    </app-habit-form>
+  }
+
+  @if (!isLoading() && habits().length) {
+    <section class="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
+      <app-analytics-chart
+        title="Streak por habito"
+        subtitle="Compare a consistencia atual das suas rotinas."
+        [labels]="streakChart().labels"
+        [values]="streakChart().values"
+        type="bar"
+        color="#3f82d7"
+      ></app-analytics-chart>
+
+      <app-analytics-chart
+        title="Conclusoes totais"
+        subtitle="Distribuicao por habito."
+        [labels]="completionsChart().labels"
+        [values]="completionsChart().values"
+        type="doughnut"
+      ></app-analytics-chart>
+    </section>
+  }
+
+  @if (isLoading()) {
+    <div class="app-shadow grid gap-4 bg-panel p-5 md:grid-cols-2 xl:grid-cols-3">
+      @for (item of [1, 2, 3]; track item) {
+        <div class="skeleton h-64"></div>
+      }
+    </div>
+  } @else {
+    <app-habit-list
+      [habits]="habits()"
+      [completingHabitId]="completingHabitId()"
+      (completeHabit)="completeHabit($event)"
+      (editHabit)="openEditForm($event)"
+      (deleteHabit)="deleteHabit($event)"
+    >
+    </app-habit-list>
+  }
+</div>

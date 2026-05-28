@@ -8,45 +8,50 @@ export const routes: Routes = [
     children: [
       {
         path: 'login',
-        loadComponent: () => import('./features/auth/login/login').then(m => m.LoginComponent)
+        loadComponent: () => import('./features/auth/login/login').then((m) => m.LoginComponent),
       },
       {
         path: 'register',
-        loadComponent: () => import('./features/auth/register/register').then(m => m.RegisterComponent)
+        loadComponent: () =>
+          import('./features/auth/register/register').then((m) => m.RegisterComponent),
       },
       {
         path: '',
         redirectTo: 'login',
-        pathMatch: 'full'
-      }
-    ]
+        pathMatch: 'full',
+      },
+    ],
   },
   {
     path: '',
     canActivate: [authGuard],
-    loadComponent: () => import('./layout/components/shell/shell').then(m => m.ShellComponent),
+    loadComponent: () => import('./layout/components/shell/shell').then((m) => m.ShellComponent),
     children: [
       {
         path: 'dashboard',
-        loadComponent: () => import('./features/dashboard/dashboard').then(m => m.DashboardComponent)
+        loadComponent: () =>
+          import('./features/dashboard/dashboard').then((m) => m.DashboardComponent),
       },
       {
         path: 'tasks',
-        loadComponent: () => import('./features/tasks/tasks').then(m => m.TasksComponent)
+        loadComponent: () => import('./features/tasks/tasks').then((m) => m.TasksComponent),
       },
       {
         path: 'habits',
-        loadComponent: () => import('./features/habits/habits').then(m => m.HabitsComponent)
+        loadComponent: () =>
+          import('./features/habits/pages/habits-page/habits-page').then(
+            (m) => m.HabitsPageComponent,
+          ),
       },
       {
         path: '',
         redirectTo: 'dashboard',
-        pathMatch: 'full'
-      }
-    ]
+        pathMatch: 'full',
+      },
+    ],
   },
   {
     path: '**',
-    redirectTo: 'dashboard'
-  }
+    redirectTo: 'dashboard',
+  },
 ];

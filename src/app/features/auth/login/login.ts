@@ -7,7 +7,7 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
-  templateUrl: './login.html'
+  templateUrl: './login.html',
 })
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
@@ -21,7 +21,7 @@ export class LoginComponent {
   constructor() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -44,9 +44,13 @@ export class LoginComponent {
       error: (err) => {
         this.isLoading.set(false);
         // Show user-friendly error message
-        const message = err.error?.message || err.error || err.message || 'Falha ao autenticar. Verifique suas credenciais.';
+        const message =
+          err.error?.message ||
+          err.error ||
+          err.message ||
+          'Falha ao autenticar. Verifique suas credenciais.';
         this.errorMessage.set(message);
-      }
+      },
     });
   }
 

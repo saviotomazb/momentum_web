@@ -7,6 +7,6 @@ import { SidebarComponent } from '../sidebar/sidebar';
   selector: 'app-shell',
   standalone: true,
   imports: [RouterOutlet, NavbarComponent, SidebarComponent],
-  templateUrl: './shell.html'
+  templateUrl: './shell.html',
 })
 export class ShellComponent {}

@@ -1,14 +1,17 @@
 <div class="mx-auto flex max-w-7xl flex-col gap-5">
   <section class="grid gap-4 lg:grid-cols-[1.1fr_1fr_1fr]">
-    <div class="app-shadow bg-panel p-5 lg:col-span-2">
+    <div class="app-shadow animate-fade-in bg-panel p-5 lg:col-span-2">
       <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p class="text-sm font-bold text-muted-ink">Ola, {{ getUserGreeting() }}</p>
           <h2 class="mt-1 text-2xl font-black text-ink">Meus Habitos</h2>
         </div>
-        <button class="h-10 rounded bg-brand-blue px-5 text-sm font-bold text-white hover:bg-brand-blue-dark">
+        <a
+          routerLink="/habits"
+          class="flex h-10 items-center justify-center rounded bg-brand-blue px-5 text-sm font-bold text-white hover:bg-brand-blue-dark"
+        >
           Add New Habit
-        </button>
+        </a>
       </div>
 
       <div class="mt-5 grid gap-3 md:grid-cols-3">
@@ -16,41 +19,45 @@
           <p class="text-xs font-bold">Habits Completed Today</p>
           <div class="mt-3 flex items-center gap-4">
             <div class="flex h-2 flex-1 overflow-hidden rounded bg-white/15">
-              <span class="w-[22%] bg-[#5ad49b]"></span>
-              <span class="w-[28%] bg-[#8fe7b3]"></span>
-              <span class="w-[22%] bg-warning"></span>
-              <span class="w-[12%] bg-[#ff846e]"></span>
+              <span
+                class="bg-success transition-all duration-500"
+                [style.width.%]="stats().completionRate"
+              ></span>
             </div>
-            <strong class="text-2xl">3 / 5</strong>
+            <strong class="text-2xl"
+              >{{ stats().completedToday }} / {{ stats().totalHabits }}</strong
+            >
           </div>
         </div>
 
         <div class="bg-brand-blue-dark px-5 py-4 text-white">
-          <p class="text-xs font-bold">Current Streak</p>
-          <p class="mt-2 text-2xl font-black">8 <span class="text-base font-bold">Dias</span></p>
+          <p class="text-xs font-bold">Current Best Streak</p>
+          <p class="mt-2 text-2xl font-black">
+            {{ stats().bestStreak }} <span class="text-base font-bold">Dias</span>
+          </p>
         </div>
 
         <div class="bg-brand-blue-dark px-5 py-4 text-white">
           <p class="text-xs font-bold">Weekly Progress</p>
-          <p class="mt-2 text-2xl font-black">75%</p>
+          <p class="mt-2 text-2xl font-black">{{ stats().completionRate }}%</p>
         </div>
       </div>
     </div>
 
-    <div class="app-shadow bg-panel p-5">
+    <div class="app-shadow animate-fade-in bg-panel p-5">
       <h3 class="text-base font-black text-ink">Resumo</h3>
       <div class="mt-4 space-y-3">
         <div class="flex items-center justify-between border-b border-line pb-3">
           <span class="text-sm text-muted-ink">Habitos ativos</span>
-          <strong class="text-xl text-ink">5</strong>
+          <strong class="text-xl text-ink">{{ stats().totalHabits }}</strong>
         </div>
         <div class="flex items-center justify-between border-b border-line pb-3">
           <span class="text-sm text-muted-ink">Concluidos hoje</span>
-          <strong class="text-xl text-ink">3</strong>
+          <strong class="text-xl text-ink">{{ stats().completedToday }}</strong>
         </div>
         <div class="flex items-center justify-between">
-          <span class="text-sm text-muted-ink">Melhor semana</span>
-          <strong class="text-xl text-ink">86%</strong>
+          <span class="text-sm text-muted-ink">Melhor streak</span>
+          <strong class="text-xl text-ink">{{ stats().bestStreak }}</strong>
         </div>
       </div>
     </div>
@@ -60,56 +67,73 @@
     <div class="app-shadow bg-panel p-5">
       <div class="mb-4 flex items-center justify-between">
         <h3 class="text-lg font-black text-ink">My Habits</h3>
-        <button class="h-8 rounded border border-line px-3 text-xs font-bold text-brand-blue hover:bg-brand-blue-soft">
-          Add New Habit
-        </button>
+        <a
+          routerLink="/habits"
+          class="flex h-8 items-center rounded border border-line px-3 text-xs font-bold text-brand-blue hover:bg-brand-blue-soft"
+        >
+          Gerenciar
+        </a>
       </div>
 
-      <div class="flex flex-col gap-3">
-        @for (habit of [
-          { title: 'Study English', frequency: 'Daily', streak: '5 Days' },
-          { title: 'Go to Gym', frequency: '5x Week', streak: '2 Days' },
-          { title: 'Read a Book', frequency: 'Daily', streak: '10 Days' }
-        ]; track habit.title) {
-          <article class="flex items-center justify-between border border-line bg-white p-4 shadow-sm">
-            <div>
-              <h4 class="font-black text-ink">{{ habit.title }}</h4>
-              <p class="mt-1 text-sm text-muted-ink">{{ habit.frequency }} <span class="px-2">|</span> {{ habit.streak }}</p>
-            </div>
-            <button class="h-10 rounded bg-success px-5 text-sm font-bold text-white hover:brightness-95">
-              Complete
-            </button>
-          </article>
-        }
-      </div>
-    </div>
-
-    <div class="app-shadow bg-panel p-5">
-      <h3 class="text-center text-lg font-black text-ink">Habit Completion This Week</h3>
-      <div class="mt-6 grid h-64 grid-cols-[32px_1fr] gap-4">
-        <div class="flex flex-col justify-between pb-8 text-xs font-bold text-muted-ink">
-          <span>9</span>
-          <span>6</span>
-          <span>3</span>
-          <span>0</span>
-        </div>
-        <div class="relative flex items-end justify-between gap-3 border-b-2 border-brand-blue/50 bg-[linear-gradient(to_bottom,transparent_24%,#dbe3ef_25%,transparent_26%,transparent_49%,#dbe3ef_50%,transparent_51%,transparent_74%,#dbe3ef_75%,transparent_76%)] px-3 pb-0">
-          @for (bar of [
-            { day: 'Mon', h: '42%' },
-            { day: 'Tue', h: '32%' },
-            { day: 'Wed', h: '74%' },
-            { day: 'Thu', h: '58%' },
-            { day: 'Fri', h: '46%' },
-            { day: 'Sat', h: '33%' },
-            { day: 'Sun', h: '24%' }
-          ]; track bar.day) {
-            <div class="flex h-full flex-1 flex-col items-center justify-end gap-2">
-              <div class="w-full max-w-12 bg-[#3f82d7]" [style.height]="bar.h"></div>
-              <span class="text-xs font-bold text-muted-ink">{{ bar.day }}</span>
-            </div>
+      @if (isLoading()) {
+        <div class="space-y-3">
+          @for (item of [1, 2, 3]; track item) {
+            <div class="skeleton h-20"></div>
           }
         </div>
-      </div>
+      } @else if (habits().length) {
+        <div class="flex flex-col gap-3">
+          @for (habit of habits().slice(0, 4); track habit.id) {
+            <article
+              class="flex items-center justify-between border border-line bg-white p-4 shadow-sm"
+            >
+              <div>
+                <h4 class="font-black text-ink">{{ habit.title }}</h4>
+                <p class="mt-1 text-sm text-muted-ink">
+                  {{ habit.frequency }}x Week <span class="px-2">|</span>
+                  {{ habit.currentStreak }} Days
+                </p>
+              </div>
+              <span
+                class="rounded px-4 py-2 text-sm font-bold"
+                [class]="
+                  habit.completedToday
+                    ? 'bg-green-50 text-success'
+                    : 'bg-brand-blue-soft text-brand-blue'
+                "
+              >
+                {{ habit.completedToday ? 'Complete' : 'Pending' }}
+              </span>
+            </article>
+          }
+        </div>
+      } @else {
+        <div class="border border-dashed border-line bg-panel-soft p-6 text-center">
+          <p class="font-bold text-ink">Nenhum habito ainda</p>
+          <p class="mt-1 text-sm text-muted-ink">
+            Crie seu primeiro habito para popular o dashboard.
+          </p>
+        </div>
+      }
     </div>
+
+    <app-analytics-chart
+      title="Habit Completion This Week"
+      subtitle="Leitura rapida da consistencia semanal."
+      [labels]="weeklyChart().labels"
+      [values]="weeklyChart().values"
+      type="bar"
+      color="#3f82d7"
+    ></app-analytics-chart>
   </section>
+
+  @if (!isLoading() && habits().length) {
+    <app-analytics-chart
+      title="Current Streaks"
+      subtitle="Top habitos por sequencia ativa."
+      [labels]="streakChart().labels"
+      [values]="streakChart().values"
+      type="doughnut"
+    ></app-analytics-chart>
+  }
 </div>
