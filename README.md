@@ -9,20 +9,6 @@
 > Frontend web do Momentum, uma aplicação para acompanhar hábitos, tarefas e progresso pessoal.
 > O projeto usa Angular com componentes standalone, rotas protegidas por autenticação JWT e uma interface responsiva para dashboard, hábitos e tarefas.
 
-## Ajustes e melhorias
-
-O projeto ainda está em desenvolvimento e as próximas atualizações serão voltadas para as seguintes tarefas:
-
-- [x] Criar base do frontend em Angular
-- [x] Implementar login e cadastro
-- [x] Proteger rotas autenticadas
-- [x] Criar layout principal com navegação
-- [x] Montar telas de dashboard, hábitos e tarefas
-- [ ] Integrar hábitos e tarefas com dados reais da API
-- [ ] Adicionar criação, edição e conclusão de hábitos
-- [ ] Expandir o módulo de tarefas
-- [ ] Melhorar cobertura de testes
-
 ## Pré-requisitos
 
 Antes de começar, verifique se você atendeu aos seguintes requisitos:
@@ -102,6 +88,17 @@ Executa os testes unitários configurados no Angular.
 - Chart.js
 - Lucide Angular
 
+### Integração
+
+- JWT Authentication
+- HTTP Interceptors
+- Route Guards
+- Consumo de API REST
+
+### Deploy
+
+- Vercel
+
 ## Estrutura do projeto
 
 ```text
@@ -120,6 +117,14 @@ src/
     layout/
       components/
 ```
+
+## Backend
+
+A API utilizada por esta aplicação está disponível no repositório:
+
+https://github.com/saviotomazb/momentum_api
+
+O backend foi desenvolvido com ASP.NET Core Web API, PostgreSQL e arquitetura baseada em Clean Architecture.
 
 ## Contribuindo para Momentum Web
 
