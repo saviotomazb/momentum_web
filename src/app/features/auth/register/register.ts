@@ -26,6 +26,9 @@ export class RegisterComponent {
   protected readonly isLoading = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
 
+  protected readonly showPassword = signal(false);
+  protected readonly showConfirmPassword = signal(false);
+
   constructor() {
     this.registerForm = this.fb.group(
       {
@@ -36,6 +39,14 @@ export class RegisterComponent {
       },
       { validators: this.passwordsMatchValidator },
     );
+  }
+
+  togglePasswordVisibility(): void {
+  this.showPassword.update((v) => !v);
+  }
+
+  toggleConfirmPasswordVisibility(): void {
+    this.showConfirmPassword.update((v) => !v);
   }
 
   onSubmit(): void {
