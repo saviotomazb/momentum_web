@@ -1,119 +1,170 @@
-<div class="grid min-h-screen w-screen bg-app-bg lg:grid-cols-[1.25fr_0.9fr]">
-  <section class="relative hidden overflow-hidden bg-brand-blue px-10 py-8 text-white lg:block">
-    <div
-      class="absolute inset-x-0 bottom-0 h-48 bg-white/90 [clip-path:ellipse(80%_55%_at_50%_100%)]"
-    ></div>
-    <div class="relative z-10 flex justify-end gap-3">
-      <a
-        routerLink="/auth/login"
-        class="rounded border border-white/30 bg-brand-blue-dark px-5 py-2 text-sm font-bold"
-        >Login</a
-      >
-      <a
-        routerLink="/auth/register"
-        class="rounded border border-white/25 px-5 py-2 text-sm font-bold hover:bg-white/10"
-        >Sign Up</a
-      >
-    </div>
+<!-- Fullscreen Auth Container -->
+<div class="relative grid min-h-dvh w-full overflow-x-hidden bg-background lg:grid-cols-[1.15fr_1fr]">
 
-    <div class="relative z-10 mx-auto mt-14 max-w-2xl text-center">
-      <h1 class="text-5xl font-black tracking-normal">Momentum</h1>
-      <p class="mt-5 text-2xl text-blue-50">Construa habitos melhores, um dia por vez</p>
-    </div>
+  <!-- LEFT PANEL — Branding (hidden on mobile) -->
+  <section class="relative hidden flex-col items-center justify-center overflow-hidden lg:flex">
+    <!-- Background SVG -->
+    <img
+      src="/backgrounds/desktop-background.webp"
+      alt=""
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 h-full w-full object-cover"
+    />
 
-    <div
-      class="relative z-10 mx-auto mt-10 grid max-w-3xl grid-cols-[220px_1fr] items-center gap-8"
-    >
-      <div class="flex flex-col gap-4">
-        <div
-          class="flex items-center gap-3 rounded bg-brand-blue-dark px-5 py-3 text-sm font-bold shadow-lg"
-        >
-          <span class="text-warning">★</span>
-          <span>Acompanhe seu progresso</span>
-        </div>
-        <div
-          class="flex items-center gap-3 rounded bg-brand-blue-dark px-5 py-3 text-sm font-bold shadow-lg"
-        >
-          <span class="text-warning">★</span>
-          <span>Alcance seus objetivos</span>
-        </div>
-      </div>
+    <!-- Content -->
+    <div class="relative z-10 flex flex-col items-center px-10 text-center">
+      <!-- Logo Symbol -->
+      <img
+        src="/logo/logo-symbol.webp"
+        alt="Momentum Logo"
+        class="h-28 w-28 drop-shadow-[0_0_40px_rgba(124,58,237,0.35)]"
+      />
 
-      <div class="relative h-64">
-        <div class="absolute bottom-8 left-24 h-28 w-48 rounded-t-md bg-white shadow-xl">
-          <div class="h-8 rounded-t-md bg-[#ff865f]"></div>
-          <div class="grid grid-cols-5 gap-2 p-4">
-            @for (item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]; track item) {
-              <span
-                class="h-5 rounded-sm"
-                [class]="item === 8 || item === 12 ? 'bg-[#ff865f]' : 'bg-[#d6e0ed]'"
-              ></span>
-            }
-          </div>
-        </div>
-        <div class="absolute bottom-4 left-14 h-28 w-8 rounded-full bg-brand-blue-dark"></div>
-        <div class="absolute bottom-8 left-11 h-24 w-10 rounded-t-full bg-[#ff865f]"></div>
-        <div class="absolute bottom-4 left-60 h-14 w-20 rounded-b-2xl bg-brand-blue-dark"></div>
-        <div
-          class="absolute bottom-16 left-60 h-16 w-24 -rotate-12 rounded-full bg-[#5ac276]"
-        ></div>
-        <div
-          class="absolute bottom-[4.5rem] left-[17.5rem] h-20 w-16 rotate-12 rounded-full bg-[#69cc86]"
-        ></div>
+      <!-- Wordmark -->
+      <img
+        src="/logo/logo-wordmark.webp"
+        alt="Momentum"
+        class="mt-5 h-10 drop-shadow-[0_0_20px_rgba(124,58,237,0.2)]"
+      />
+
+      <!-- Tagline -->
+      <h1 class="mt-8 text-3xl font-extrabold leading-tight text-white sm:text-4xl">
+        Transformando <span class="text-accent">consistência</span><br />
+        em <span class="text-accent">progresso.</span>
+      </h1>
+
+      <p class="mt-5 max-w-md text-base leading-7 text-text-secondary">
+        Gerencie seus hábitos, acompanhe sua evolução e desenvolva uma rotina consistente.
+      </p>
+
+      <!-- Illustration -->
+      <div class="relative mt-10">
+        <img
+          src="/illustrations/activities.webp"
+          alt="Habit tracking illustration"
+          class="h-56 w-auto drop-shadow-[0_8px_30px_rgba(124,58,237,0.15)] xl:h-64"
+        />
       </div>
     </div>
   </section>
 
-  <section class="flex items-center justify-center p-5">
-    <div class="app-shadow w-full max-w-md bg-panel px-7 py-8 sm:px-10">
-      <div class="mb-7 text-center">
-        <h2 class="text-3xl font-black text-ink">Entrar</h2>
-        <p class="mt-2 text-sm text-muted-ink">Acesse sua conta para continuar</p>
+  <!-- RIGHT PANEL — Login Form -->
+  <section class="relative flex min-h-dvh flex-col items-center justify-start bg-[url('/backgrounds/mobile-background.webp')] bg-cover bg-center bg-no-repeat p-5 pt-8 sm:p-8 lg:justify-center lg:pt-8 lg:bg-none">
+
+    <!-- Mobile branding (visible < lg) -->
+    <div class="mb-6 flex flex-col items-center lg:hidden">
+
+      <img src="/logo/logo-symbol.webp" alt="Momentum Logo" class="h-14 w-14 sm:h-20 sm:w-20" />
+      <img src="/logo/logo-wordmark.webp" alt="Momentum" class="mt-2 h-5 sm:h-7" />
+
+      <h1 class="mt-3 text-center text-lg font-bold leading-tight sm:text-xl leading-snug text-white">
+        Transformando <span class="text-accent">consistência</span> em
+        <span class="text-accent">progresso.</span>
+      </h1>
+
+      <!-- Small illustration on mobile -->
+      <img
+        src="/illustrations/activities.webp"
+        alt=""
+        class="mt-4 hidden h-36 w-auto opacity-90 sm:block"
+      />
+    </div>
+
+    <!-- Card -->
+    <div class="w-full max-w-md rounded-xl border border-border bg-surface p-5 shadow-[0_8px_40px_rgba(0,0,0,0.4)] sm:p-9">
+      <!-- Header -->
+      <div class="mb-5 text-center">
+        <h2 class="text-3xl font-extrabold tracking-tight text-white">Entrar</h2>
+        <p class="mt-1.5 text-base text-text-secondary">Acesse sua conta para continuar</p>
       </div>
 
+      <!-- Error Alert -->
       @if (errorMessage(); as error) {
-        <div class="mb-5 border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {{ error }}
+        <div
+          class="mb-5 flex items-start gap-3 rounded-lg border border-error/20 bg-error/5 p-4 text-base text-error"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 shrink-0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>{{ error }}</span>
         </div>
       }
 
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-        <div>
-          <input
-            type="email"
-            id="email"
-            formControlName="email"
-            placeholder="Email"
-            class="h-12 w-full rounded border border-line bg-white px-4 text-sm text-ink outline-none transition focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/15"
-            [class.border-red-500]="isFieldInvalid('email')"
-          />
+      <!-- Form -->
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-3.5 sm:gap-4">
+        <!-- Email -->
+        <div class="flex flex-col gap-1.5">
+          <label for="login-email" class="text-sm font-medium text-text-secondary">Email</label>
+          <div class="relative">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-placeholder"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <input
+              type="email"
+              id="login-email"
+              formControlName="email"
+              placeholder="seu@email.com"
+              autocomplete="email"
+              class="h-12 w-full rounded-lg border border-input-border bg-input-background pl-11 pr-4 text-base text-white outline-none transition placeholder:text-placeholder focus:border-input-focus focus:ring-2 focus:ring-primary/20"
+              [class.border-error]="isFieldInvalid('email')"
+            />
+          </div>
           @if (isFieldInvalid('email')) {
-            <span class="mt-1 block text-xs text-red-600">Insira um email valido</span>
+            <span class="text-xs text-error">Insira um e-mail válido</span>
           }
         </div>
 
-        <div>
-          <input
-            type="password"
-            id="password"
-            formControlName="password"
-            placeholder="Senha"
-            class="h-12 w-full rounded border border-line bg-white px-4 text-sm text-ink outline-none transition focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/15"
-            [class.border-red-500]="isFieldInvalid('password')"
-          />
-          @if (isFieldInvalid('password')) {
-            <span class="mt-1 block text-xs text-red-600"
-              >A senha deve ter no minimo 6 caracteres</span
+        <!-- Password -->
+        <div class="flex flex-col gap-1.5">
+          <label for="login-password" class="text-sm font-medium text-text-secondary">Senha</label>
+          <div class="relative">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-placeholder"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              id="login-password"
+              formControlName="password"
+              placeholder="Sua senha"
+              autocomplete="current-password"
+              class="h-12 w-full rounded-lg border border-input-border bg-input-background pl-11 pr-12 text-base text-white outline-none transition placeholder:text-placeholder focus:border-input-focus focus:ring-2 focus:ring-primary/20"
+              [class.border-error]="isFieldInvalid('password')"
+            />
+            <!-- Toggle visibility -->
+            <button
+              type="button"
+              (click)="togglePasswordVisibility()"
+              class="absolute right-3.5 top-1/2 -translate-y-1/2 cursor-pointer text-placeholder transition hover:text-text-secondary"
             >
+              @if (showPassword()) {
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              } @else {
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              }
+            </button>
+          </div>
+          @if (isFieldInvalid('password')) {
+            <span class="text-xs text-error">Insira uma senha válida</span>
           }
         </div>
 
+        <!-- Remember me / Forgot password -->
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <label class="flex cursor-pointer items-center gap-2 text-base text-text-secondary">
+            <input
+              type="checkbox"
+              formControlName="rememberMe"
+              class="h-4 w-4 cursor-pointer rounded border-border bg-input-background text-primary accent-primary focus:ring-primary/30"
+            />
+            <span>Lembrar de mim</span>
+          </label>
+          <a href="javascript:void(0)" class="text-base font-medium text-primary transition hover:text-primary-hover">
+            Esqueceu sua senha?
+          </a>
+        </div>
+
+        <!-- Submit -->
         <button
           type="submit"
           [disabled]="isLoading()"
-          class="mt-1 flex h-12 items-center justify-center rounded bg-brand-blue text-sm font-bold text-white transition hover:bg-brand-blue-dark disabled:pointer-events-none disabled:opacity-60"
+          class="mt-1 flex h-12 cursor-pointer items-center justify-center rounded-lg bg-gradient-to-r from-gradient-start via-gradient-middle to-gradient-end text-base font-semibold text-white shadow-[0_4px_20px_rgba(124,58,237,0.35)] transition-all duration-200 hover:brightness-110 hover:shadow-[0_4px_28px_rgba(124,58,237,0.5)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
         >
           @if (isLoading()) {
+            <svg class="mr-2 h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
             <span>Entrando...</span>
           } @else {
             <span>Login</span>
@@ -121,11 +172,31 @@
         </button>
       </form>
 
-      <div class="mt-6 border-t border-line pt-5 text-center text-sm text-muted-ink">
-        Nao tem uma conta?
-        <a routerLink="/auth/register" class="font-semibold text-brand-blue hover:underline"
-          >Criar conta</a
+      <!-- Divider -->
+      <div class="my-4 flex items-center gap-4">
+        <div class="h-px flex-1 bg-border"></div>
+        <span class="text-xs font-medium uppercase tracking-wider text-text-disabled">ou</span>
+        <div class="h-px flex-1 bg-border"></div>
+      </div>
+
+      <!-- Google Button -->
+      <button
+        type="button"
+        class="flex h-12 cursor-pointer w-full items-center justify-center gap-3 rounded-lg border border-border bg-surface-2 text-sm sm:text-base font-semibold text-white transition-all duration-200 hover:border-border-hover hover:bg-card"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v2.97h3.86c2.26-2.09 3.56-5.17 3.56-8.79z"/><path fill="#34A853" d="M12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-2.97c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.07C3.515 21.27 7.565 24 12.255 24z"/><path fill="#FBBC05" d="M5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.64h-3.98a11.86 11.86 0 000 10.72l3.98-3.07z"/><path fill="#EA4335" d="M12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0c-4.69 0-8.74 2.73-10.71 6.64l3.98 3.07c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+        Continuar com Google
+      </button>
+
+      <!-- Register redirect -->
+      <div class="mt-4 text-center text-sm sm:text-base text-text-secondary">
+        Não tem uma conta?
+        <a
+          routerLink="/auth/register"
+          class="font-semibold text-primary transition hover:text-primary-hover hover:underline"
         >
+          Criar conta
+        </a>
       </div>
     </div>
   </section>

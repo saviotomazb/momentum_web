@@ -1,29 +1,29 @@
-<nav class="grid grid-cols-3 bg-brand-blue-dark text-sm font-bold text-blue-100 md:hidden">
+<nav class="grid grid-cols-3 bg-surface border-b border-border text-sm font-bold text-text-secondary md:hidden">
   <a
     routerLink="/dashboard"
-    routerLinkActive="bg-white/10 text-white"
+    routerLinkActive="bg-primary/10 text-primary border-b-2 border-primary"
     [routerLinkActiveOptions]="{ exact: true }"
     class="px-3 py-3 text-center"
   >
     Dashboard
   </a>
-  <a routerLink="/tasks" routerLinkActive="bg-white/10 text-white" class="px-3 py-3 text-center">
+  <a routerLink="/tasks" routerLinkActive="bg-primary/10 text-primary border-b-2 border-primary" class="px-3 py-3 text-center">
     Tarefas
   </a>
-  <a routerLink="/habits" routerLinkActive="bg-white/10 text-white" class="px-3 py-3 text-center">
+  <a routerLink="/habits" routerLinkActive="bg-primary/10 text-primary border-b-2 border-primary" class="px-3 py-3 text-center">
     Habitos
   </a>
 </nav>
 
 <aside
-  class="hidden h-[calc(100vh-64px)] w-60 flex-col justify-between bg-brand-blue-dark py-4 text-white shadow-[6px_0_18px_rgba(35,63,102,0.12)] md:flex"
+  class="hidden h-[calc(100vh-64px)] w-60 flex-col justify-between bg-surface border-r border-border py-4 text-white md:flex"
 >
   <nav class="flex flex-col">
     <a
       routerLink="/dashboard"
-      routerLinkActive="bg-white/10 text-white font-semibold"
+      routerLinkActive="bg-primary/10 text-primary border-l-4 border-primary font-semibold"
       [routerLinkActiveOptions]="{ exact: true }"
-      class="group flex items-center gap-3 px-5 py-3 text-sm text-blue-100 transition-colors hover:bg-white/10 hover:text-white"
+      class="group flex items-center gap-3 px-5 py-3 text-sm text-text-secondary transition-colors hover:bg-surface-2 hover:text-white"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -47,8 +47,8 @@
 
     <a
       routerLink="/tasks"
-      routerLinkActive="bg-white/10 text-white font-semibold"
-      class="group flex items-center gap-3 px-5 py-3 text-sm text-blue-100 transition-colors hover:bg-white/10 hover:text-white"
+      routerLinkActive="bg-primary/10 text-primary border-l-4 border-primary font-semibold"
+      class="group flex items-center gap-3 px-5 py-3 text-sm text-text-secondary transition-colors hover:bg-surface-2 hover:text-white"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -70,8 +70,8 @@
 
     <a
       routerLink="/habits"
-      routerLinkActive="bg-white/10 text-white font-semibold"
-      class="group flex items-center gap-3 px-5 py-3 text-sm text-blue-100 transition-colors hover:bg-white/10 hover:text-white"
+      routerLinkActive="bg-primary/10 text-primary border-l-4 border-primary font-semibold"
+      class="group flex items-center gap-3 px-5 py-3 text-sm text-text-secondary transition-colors hover:bg-surface-2 hover:text-white"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -91,8 +91,8 @@
     </a>
   </nav>
 
-  <div class="px-5 text-xs text-blue-100">
-    <div class="flex items-center gap-2 border border-white/15 bg-white/10 px-3 py-2.5">
+  <div class="px-5 text-xs text-text-tertiary">
+    <div class="flex items-center gap-2 border border-border bg-surface-2 px-3 py-2.5">
       <span class="relative flex h-2 w-2">
         <span class="relative inline-flex h-2 w-2 rounded-full bg-success"></span>
       </span>

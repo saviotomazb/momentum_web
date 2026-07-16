@@ -17,12 +17,18 @@ export class LoginComponent {
   protected readonly loginForm: FormGroup;
   protected readonly isLoading = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
+  protected readonly showPassword = signal(false);
 
   constructor() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+      rememberMe: [false],
     });
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword.update((v) => !v);
   }
 
   onSubmit(): void {
@@ -43,7 +49,6 @@ export class LoginComponent {
       },
       error: (err) => {
         this.isLoading.set(false);
-        // Show user-friendly error message
         const message =
           err.error?.message ||
           err.error ||

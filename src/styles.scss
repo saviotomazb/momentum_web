@@ -7,42 +7,93 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-brand-blue: #2f68b8;
-  --color-brand-blue-dark: #244b79;
-  --color-brand-blue-soft: #dbe9fb;
-  --color-ink: #233f66;
-  --color-muted-ink: #5d7290;
-  --color-app-bg: #eef3f9;
-  --color-panel: #ffffff;
-  --color-panel-soft: #f7f9fc;
-  --color-line: #cfd9e8;
-  --color-success: #2f9b62;
-  --color-warning: #f5c75a;
+  // Brand / Primary
+  --color-primary: #7C3AED;
+  --color-primary-hover: #6D28D9;
+  --color-primary-active: #5B21B6;
+  --color-accent: #A855F7;
+
+  // Backgrounds / Surfaces
+  --color-background: #14141F;
+  --color-surface: #1B1B29;
+  --color-surface-2: #242437;
+  --color-card: #2D2D44;
+
+  // Borders
+  --color-border: #3A3A56;
+  --color-border-hover: #50507A;
+
+  // Text
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #C7C7D1;
+  --color-text-tertiary: #9A9AAC;
+  --color-text-disabled: #68687A;
+
+  // Feedback
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --color-info: #3B82F6;
+
+  // Inputs
+  --color-input-background: #11111A;
+  --color-input-border: #2A2A3D;
+  --color-input-focus: #7C3AED;
+  --color-placeholder: #7E7E91;
+
+  // Buttons
+  --color-button-primary: #7C3AED;
+  --color-button-primary-hover: #6D28D9;
+  --color-button-secondary-hover: #1F1F2E;
+
+  // Dividers
+  --color-divider: #232336;
+
+  // Gradients
+  --color-gradient-start: #4C1D95;
+  --color-gradient-middle: #6D28D9;
+  --color-gradient-end: #A855F7;
+
+  // Semantic mappings to match existing components smoothly
+  --color-brand-blue: #7C3AED;
+  --color-brand-blue-dark: #171723;
+  --color-brand-blue-soft: #232336;
+  --color-ink: #FFFFFF;
+  --color-muted-ink: #C7C7D1;
+  --color-app-bg: #0B0B12;
+  --color-panel: #11111A;
+  --color-panel-soft: #171723;
+  --color-line: #2A2A3D;
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
 }
 
 html {
   height: 100%;
+
   @include mat.theme(
     (
       color: (
-        theme-type: light,
+        theme-type: dark,
         primary: mat.$azure-palette,
         tertiary: mat.$blue-palette,
       ),
-      typography: Roboto,
+      typography: Manrope,
       density: 0,
     )
   );
 }
 
 body {
-  color-scheme: light;
-  background-color: #eef3f9;
-  color: #233f66;
-  font-family: 'Roboto', sans-serif;
+  color-scheme: dark;
+  background-color: #0B0B12;
+  color: #FFFFFF;
+  font-family: 'Manrope', sans-serif;
   margin: 0;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100dvh;
+
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* Custom Scrollbar for modern minimalist look */
@@ -51,14 +102,14 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #eef3f9;
+  background: #0B0B12;
 }
 ::-webkit-scrollbar-thumb {
-  background: #b6c6da;
+  background: #2A2A3D;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #8ea7c6;
+  background: #3A3A56;
 }
 
 .app-shadow {

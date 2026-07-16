@@ -25,7 +25,7 @@ export class AnalyticsChartComponent implements AfterViewInit, OnChanges, OnDest
   @Input() labels: string[] = [];
   @Input() values: number[] = [];
   @Input() type: ChartType = 'bar';
-  @Input() color = '#3f82d7';
+  @Input() color = '#7C3AED';
 
   private chart?: Chart;
   private viewReady = false;
@@ -64,11 +64,11 @@ export class AnalyticsChartComponent implements AfterViewInit, OnChanges, OnDest
           {
             data: this.values,
             backgroundColor: isDoughnut
-              ? ['#2f68b8', '#2f9b62', '#f5c75a', '#f25f4c', '#7c9bc5', '#244b79']
+              ? ['#7C3AED', '#22C55E', '#F59E0B', '#EF4444', '#A855F7', '#3B82F6']
               : this.color,
-            borderColor: isDoughnut ? '#ffffff' : this.color,
+            borderColor: isDoughnut ? '#11111A' : this.color,
             borderWidth: isDoughnut ? 3 : 0,
-            borderRadius: isDoughnut ? 0 : 4,
+            borderRadius: isDoughnut ? 0 : 6,
           },
         ],
       },
@@ -84,7 +84,7 @@ export class AnalyticsChartComponent implements AfterViewInit, OnChanges, OnDest
             display: isDoughnut,
             position: 'bottom',
             labels: {
-              color: '#5d7290',
+              color: '#9A9AAC',
               boxWidth: 10,
               padding: 14,
               font: {
@@ -94,7 +94,11 @@ export class AnalyticsChartComponent implements AfterViewInit, OnChanges, OnDest
             },
           },
           tooltip: {
-            backgroundColor: '#244b79',
+            backgroundColor: '#171723',
+            titleColor: '#FFFFFF',
+            bodyColor: '#C7C7D1',
+            borderColor: '#2A2A3D',
+            borderWidth: 1,
             displayColors: false,
             padding: 10,
           },
@@ -107,7 +111,7 @@ export class AnalyticsChartComponent implements AfterViewInit, OnChanges, OnDest
                   display: false,
                 },
                 ticks: {
-                  color: '#5d7290',
+                  color: '#9A9AAC',
                   font: {
                     size: 11,
                     weight: 'bold',
@@ -117,10 +121,10 @@ export class AnalyticsChartComponent implements AfterViewInit, OnChanges, OnDest
               y: {
                 beginAtZero: true,
                 grid: {
-                  color: '#dbe3ef',
+                  color: '#2A2A3D',
                 },
                 ticks: {
-                  color: '#5d7290',
+                  color: '#9A9AAC',
                   precision: 0,
                 },
               },

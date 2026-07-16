@@ -1,21 +1,21 @@
 <header
-  class="flex h-16 w-full items-center justify-between bg-brand-blue px-5 text-white shadow-[0_3px_12px_rgba(35,63,102,0.18)] sm:px-7"
+  class="flex h-16 w-full items-center justify-between bg-surface px-5 text-white border-b border-border sm:px-7"
 >
   <div class="flex items-center gap-2">
-    <span class="text-xl font-black tracking-normal"> Momentum </span>
+    <span class="text-xl font-black tracking-wider bg-gradient-to-r from-gradient-start via-gradient-middle to-gradient-end bg-clip-text text-transparent uppercase"> Momentum </span>
   </div>
 
   <div class="flex items-center gap-3">
     @if (authService.currentUser(); as user) {
       <div class="hidden flex-col text-right sm:flex">
-        <span class="text-xs text-blue-100">Logado como</span>
-        <span class="text-sm font-medium text-white">{{ user.email }}</span>
+        <span class="text-xs text-text-tertiary">Logado como</span>
+        <span class="text-sm font-medium text-text-secondary">{{ user.email }}</span>
       </div>
     }
 
     <button
       (click)="logout()"
-      class="group flex h-9 w-9 items-center justify-center rounded border border-white/25 bg-brand-blue-dark/40 text-white transition-colors hover:bg-white/10"
+      class="group flex h-9 w-9 items-center justify-center rounded border border-border bg-surface-2 text-text-secondary transition-colors hover:bg-surface hover:text-white"
       title="Sair"
     >
       <svg
