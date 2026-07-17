@@ -30,11 +30,11 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () =>
-          import('./features/dashboard/dashboard').then((m) => m.DashboardComponent),
+          import('./features/dashboard/pages/dashboard').then((m) => m.DashboardComponent),
       },
       {
         path: 'tasks',
-        loadComponent: () => import('./features/tasks/tasks').then((m) => m.TasksComponent),
+        loadComponent: () => import('./features/tasks/pages/tasks').then((m) => m.TasksComponent),
       },
       {
         path: 'habits',
@@ -42,6 +42,11 @@ export const routes: Routes = [
           import('./features/habits/pages/habits-page/habits-page').then(
             (m) => m.HabitsPageComponent,
           ),
+      },
+      {
+        path: 'overview',
+        loadComponent: () =>
+          import('./features/overview/pages/overview').then((m) => m.OverviewComponent),
       },
       {
         path: '',

@@ -1,21 +1,45 @@
 <header
-  class="flex h-16 w-full items-center justify-between bg-surface px-5 text-white border-b border-border sm:px-7"
+  class="sticky top-0 z-40 flex h-[72px] w-full items-center justify-between border-b border-border bg-surface/90 px-6 backdrop-blur-xl sm:px-8"
 >
-  <div class="flex items-center gap-2">
-    <span class="text-xl font-black tracking-wider bg-gradient-to-r from-gradient-start via-gradient-middle to-gradient-end bg-clip-text text-transparent uppercase"> Momentum </span>
+  <!-- Brand -->
+  <div class="flex items-center">
+    <img
+      src="/logo/logo-wordmark.webp"
+      alt="Momentum"
+      class="h-6 w-auto select-none"
+      draggable="false"
+    />
   </div>
 
-  <div class="flex items-center gap-3">
+  <!-- User -->
+  <div class="flex items-center gap-4">
     @if (authService.currentUser(); as user) {
-      <div class="hidden flex-col text-right sm:flex">
-        <span class="text-xs text-text-tertiary">Logado como</span>
-        <span class="text-sm font-medium text-text-secondary">{{ user.email }}</span>
+      <div class="hidden text-right md:block">
+        <p class="text-xs text-text-tertiary">
+          Olá,
+        </p>
+
+        <p class="text-sm font-semibold text-text-primary">
+          {{ user.email }}
+        </p>
+      </div>
+
+      <!-- Avatar -->
+      <div
+        class="flex h-10 w-10 items-center justify-center rounded-full
+              bg-gradient-to-r
+              from-gradient-start
+              via-gradient-middle
+              to-gradient-end
+              text-sm font-bold text-white">
+      {{ user.email.charAt(0).toUpperCase() }}
       </div>
     }
 
+    <!-- Logout -->
     <button
       (click)="logout()"
-      class="group flex h-9 w-9 items-center justify-center rounded border border-border bg-surface-2 text-text-secondary transition-colors hover:bg-surface hover:text-white"
+      class="group flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-border bg-surface-2 text-text-secondary transition-all duration-200 hover:border-primary/40 hover:bg-primary/10 hover:text-primary"
       title="Sair"
     >
       <svg
@@ -28,7 +52,7 @@
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
-        class="transition-transform group-hover:translate-x-0.5"
+        class="transition-transform duration-200 group-hover:translate-x-0.5"
       >
         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
         <polyline points="16 17 21 12 16 7"></polyline>

@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AnalyticsChartComponent } from '../../shared/components/analytics-chart/analytics-chart';
-import { AuthService } from '../../core/services/auth.service';
-import { Habit } from '../habits/models/habit.model';
-import { HabitsService } from '../habits/services/habits.service';
+import { AnalyticsChartComponent } from '../../../shared/components/analytics-chart/analytics-chart';
+import { AuthService } from '../../../core/services/auth.service';
+import { Habit } from '../../habits/models/habit.model';
+import { HabitsService } from '../../habits/services/habits.service';
 
 @Component({
   selector: 'app-dashboard',
