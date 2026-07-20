@@ -1,14 +1,46 @@
 <header
-  class="sticky top-0 z-40 flex h-[72px] w-full items-center justify-between border-b border-border bg-surface/90 px-6 backdrop-blur-xl sm:px-8"
+  class="sticky top-0 z-60 flex h-[72px] w-full items-center justify-between border-b border-border bg-surface/90 px-6 backdrop-blur-xl sm:px-8"
 >
   <!-- Brand -->
-  <div class="flex items-center">
+  <!-- <div class="flex items-center">
     <img
       src="/logo/logo-wordmark.webp"
       alt="Momentum"
       class="h-6 w-auto select-none"
       draggable="false"
     />
+  </div> -->
+  <div class="flex items-center gap-4">
+  @if (viewport() !== 'desktop') {
+      <button
+        type="button"
+        (click)="onToggleSidebar()"
+        class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-text-secondary transition hover:bg-surface-2 hover:text-white"
+        aria-label="Abrir menu"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    }
+    <img
+      src="/logo/logo-wordmark.webp"
+      alt="Momentum"
+      class="hidden h-6 w-auto sm:block"
+    />
+
   </div>
 
   <!-- User -->
