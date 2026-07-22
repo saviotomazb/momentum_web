@@ -1,134 +1,178 @@
 # Momentum Web
 
-![GitHub repo size](https://img.shields.io/github/repo-size/saviotomazb/momentum_web?style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/saviotomazb/momentum_web?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/saviotomazb/momentum_web?style=for-the-badge)
-![GitHub issues](https://img.shields.io/github/issues/saviotomazb/momentum_web?style=for-the-badge)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/saviotomazb/momentum_web?style=for-the-badge)
+<p align="center">
+  <img src="public/logo/logo-wordmark.webp" alt="Momentum Wordmark" width="700">
+</p>
 
-> Frontend web do Momentum, uma aplicação para acompanhar hábitos, tarefas e progresso pessoal.
-> O projeto usa Angular com componentes standalone, rotas protegidas por autenticação JWT e uma interface responsiva para dashboard, hábitos e tarefas.
+Frontend da aplicação **Momentum**, desenvolvido com **Angular**, responsável por fornecer uma interface moderna, intuitiva e responsiva para o gerenciamento de hábitos, tarefas e acompanhamento da evolução do usuário.
 
-## Pré-requisitos
+---
 
-Antes de começar, verifique se você atendeu aos seguintes requisitos:
+## 📖 Sobre o Projeto
 
-- Você instalou o [Node.js](https://nodejs.org/) em uma versão compatível com Angular 21.
-- Você instalou o npm. Este projeto foi configurado com `npm@10.8.2`.
-- Você tem uma API backend disponível em `http://localhost:5271`.
-- Você tem uma máquina Windows, Linux ou macOS com terminal e Git instalados.
+O **Momentum Web** é a aplicação frontend do ecossistema **Momentum**.
 
-## Instalando Momentum Web
+Seu objetivo é oferecer uma experiência intuitiva e agradável para que os usuários possam gerenciar seus hábitos, tarefas e finanças, acompanhar sua evolução e utilizar os recursos disponibilizados pela **Momentum API**.
 
-Para instalar o Momentum Web, siga estas etapas:
+A aplicação foi desenvolvida utilizando as tecnologias mais recentes do ecossistema Angular, seguindo boas práticas de organização, componentização e escalabilidade.
+
+---
+
+## ✨ Funcionalidades
+
+### ✅ Implementadas
+
+* 🔐 Autenticação e gerenciamento de usuários
+* 📊 Dashboard com indicadores e visão geral da evolução
+* ✅ Gerenciamento de hábitos
+* 📈 Acompanhamento do progresso do usuário
+* 📱 Interface responsiva para diferentes dispositivos
+* 🔄 Integração com a **Momentum API**
+
+### 🚧 Em desenvolvimento
+
+* 📋 Gerenciamento de tarefas
+* 💰 Gerenciamento financeiro
+
+---
+
+## 🛠️ Stack
+
+### Framework
+
+* Angular 21
+
+### Linguagem
+
+* TypeScript 5
+
+### Interface do Usuário
+
+* Angular Material
+* Angular CDK
+* Lucide Angular
+
+### Estilização
+
+* Tailwind CSS 4
+* PostCSS
+* Autoprefixer
+
+### Comunicação e Programação Reativa
+
+* Angular Router
+* Angular Forms
+* RxJS
+
+### Visualização de Dados
+
+* Chart.js
+
+### Testes
+
+* Vitest
+* JSDOM
+
+### Qualidade de Código
+
+* Prettier
+
+---
+
+## 📁 Estrutura do Projeto
+
+```text
+src/
+├── app/
+├── assets/
+├── environments/
+└── styles/
+```
+
+> A organização das pastas segue uma arquitetura modular, visando facilitar a manutenção, escalabilidade e reutilização dos componentes.
+
+---
+
+## 🚀 Como Executar
+
+### Pré-requisitos
+
+* Node.js
+* npm
+* Angular CLI
+
+### Clonar o repositório
 
 ```bash
 git clone https://github.com/saviotomazb/momentum_web.git
+
 cd momentum_web
+```
+
+### Instalar as dependências
+
+```bash
 npm install
 ```
 
-## Usando Momentum Web
-
-Para iniciar o servidor de desenvolvimento, execute:
+### Executar a aplicação
 
 ```bash
 npm start
 ```
 
-Depois, acesse:
+ou
+
+```bash
+ng serve
+```
+
+A aplicação estará disponível em:
 
 ```text
 http://localhost:4200
 ```
 
-Rotas principais da aplicação:
+---
 
-- `/auth/login`: login de usuário
-- `/auth/register`: cadastro de usuário
-- `/dashboard`: resumo dos hábitos e progresso semanal
-- `/habits`: formulário e acompanhamento de hábitos
-- `/tasks`: módulo inicial de tarefas
+## ⚙️ Configuração
 
-## Scripts disponíveis
+Antes de iniciar a aplicação, configure a URL da API no arquivo de ambiente correspondente.
 
-```bash
-npm start
+Exemplo:
+
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'https://localhost:5001/api'
+};
 ```
 
-Inicia a aplicação em modo de desenvolvimento.
+---
 
-```bash
-npm run build
-```
+## 📜 Scripts Disponíveis
 
-Gera a versão de produção em `dist/`.
+| Comando          | Descrição                                                 |
+| ---------------- | --------------------------------------------------------- |
+| `npm start`      | Executa a aplicação em modo de desenvolvimento            |
+| `npm run build`  | Gera a build de produção                                  |
+| `npm run watch`  | Gera a build em modo *watch*                              |
+| `npm test`       | Executa os testes automatizados                           |
+| `npm run format` | Formata o código utilizando Prettier *(caso configurado)* |
 
-```bash
-npm run watch
-```
+---
 
-Executa o build em modo observação para desenvolvimento.
+## 🔗 Projetos Relacionados
 
-```bash
-npm test
-```
+- **[Momentum API](https://github.com/saviotomazb/momentum_api.git)** — Backend responsável pelas regras de negócio, autenticação, persistência dos dados e disponibilização da API REST.
 
-Executa os testes unitários configurados no Angular.
+---
 
-## Tecnologias utilizadas
+## 🤝 Contribuindo
 
-- Angular 21
-- TypeScript
-- Angular Router
-- Angular Forms
-- Angular Material/CDK
-- Tailwind CSS
-- RxJS
-- Chart.js
-- Lucide Angular
+Contribuições são sempre bem-vindas.
 
-### Integração
-
-- JWT Authentication
-- HTTP Interceptors
-- Route Guards
-- Consumo de API REST
-
-### Deploy
-
-- Vercel
-
-## Estrutura do projeto
-
-```text
-src/
-  app/
-    core/
-      constants/
-      guards/
-      interceptors/
-      services/
-    features/
-      auth/
-      dashboard/
-      habits/
-      tasks/
-    layout/
-      components/
-```
-
-## Backend
-
-A API utilizada por esta aplicação está disponível no repositório:
-
-https://github.com/saviotomazb/momentum_api
-
-O backend foi desenvolvido com ASP.NET Core Web API, PostgreSQL e arquitetura baseada em Clean Architecture.
-
-## Contribuindo para Momentum Web
-
-Para contribuir com Momentum Web, siga estas etapas:
+Caso encontre algum problema ou tenha sugestões de melhoria, fique à vontade para abrir uma **Issue** ou enviar uma **Pull Request**, siga estas etapas:
 
 1. Bifurque este repositório.
 2. Crie um branch: `git checkout -b minha-feature`.
@@ -136,21 +180,8 @@ Para contribuir com Momentum Web, siga estas etapas:
 4. Envie para o branch remoto: `git push origin minha-feature`.
 5. Abra uma pull request.
 
-Como alternativa, consulte a documentação do GitHub sobre [como criar uma pull request](https://docs.github.com/pt/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request).
+Antes de contribuir, certifique-se de:
 
-## Colaboradores
-
-Agradecemos as seguintes pessoas que contribuiram para este projeto:
-
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/saviotomazb" title="Perfil de Sávio Tomaz no GitHub">
-        <img src="https://avatars.githubusercontent.com/saviotomazb" width="100px;" alt="Foto de Sávio Tomaz no GitHub"/><br>
-        <sub>
-          <b>Sávio Tomaz</b>
-        </sub>
-      </a>
-    </td>
-  </tr>
-</table>
+* Manter o código padronizado.
+* Escrever código legível e reutilizável.
+* Executar os testes antes de enviar alterações.
