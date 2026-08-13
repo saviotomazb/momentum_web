@@ -18,9 +18,11 @@
           @for (item of section.items; track item.label) {
             @if (item.children?.length) {
               <div
-                class="rounded-xl"
-                routerLinkActive="bg-primary/10 ring-1 ring-primary/20"
-                [routerLinkActiveOptions]="{ exact: false }"
+                class="rounded-xl transition-colors duration-200"
+                [class.bg-primary/10]="isFinancesActive()"
+                [class.ring-1]="isFinancesActive()"
+                [class.ring-primary/20]="isFinancesActive()"
+                [class.pb-2]="financesExpanded()"
               >
                 <button
                   type="button"
@@ -56,7 +58,7 @@
                         routerLinkActive="bg-primary/10 text-primary"
                         [routerLinkActiveOptions]="{ exact: true }"
                         class="flex min-h-9 items-center rounded-lg px-3 py-2 text-sm font-medium text-text-secondary transition-[background-color,color] duration-200 hover:bg-white/[0.04] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
-                        (click)="onNavigate()"
+                        (click)="onNavigate(false)"
                       >
                         {{ child.label }}
                       </a>

@@ -28,11 +28,6 @@ export const routes: Routes = [
     loadComponent: () => import('./layout/components/shell/shell').then((m) => m.ShellComponent),
     children: [
       {
-        path: 'dashboard',
-        loadComponent: () =>
-          import('./features/dashboard/pages/dashboard').then((m) => m.DashboardComponent),
-      },
-      {
         path: 'tasks',
         loadComponent: () => import('./features/tasks/pages/tasks').then((m) => m.TasksComponent),
       },
@@ -44,10 +39,38 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'overview',
+        path: 'dashboard',
         loadComponent: () =>
-          import('./features/overview/pages/overview').then((m) => m.OverviewComponent),
+          import('./features/dashboard/pages/dashboard').then((m) => m.DashboardComponent),
       },
+
+      {
+        path: 'finances',
+        children: [
+          {
+            path: 'overview',
+            loadComponent: () =>
+              import('./features/finances/pages/overview/overview').then(
+                (m) => m.OverviewComponent,
+              ),
+          },
+          {
+            path: 'transactions',
+            loadComponent: () =>
+              import('./features/finances/pages/transactions/transactions').then(
+                (m) => m.TransactionsComponent,
+              ),
+          },
+          {
+            path: 'categories',
+            loadComponent: () =>
+              import('./features/finances/pages/categories/categories').then(
+                (m) => m.CategoriesComponent,
+              ),
+          },
+        ],
+      },
+
       {
         path: '',
         redirectTo: 'dashboard',

@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Output, input, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import {
   BarChart3,
   CalendarDays,
   ChevronDown,
   CircleHelp,
+  Gauge,
   LayoutDashboard,
   ListTodo,
   LucideAngularModule,
@@ -53,14 +54,16 @@ export class SidebarComponent {
     chevron: ChevronDown,
   };
 
+  constructor(private readonly router: Router) {}
+
   protected readonly sections: SidebarSection[] = [
     {
       title: 'Principal',
       items: [
         {
-          label: 'Visão geral',
-          path: '/overview',
-          icon: LayoutDashboard,
+          label: 'Dashboard',
+          path: '/dashboard',
+          icon: Gauge,
         },
         {
           label: 'Tarefas',
@@ -78,7 +81,7 @@ export class SidebarComponent {
           children: [
             {
               label: 'Visão geral',
-              path: '/finances',
+              path: '/finances/overview',
             },
             {
               label: 'Transações',
@@ -124,7 +127,11 @@ export class SidebarComponent {
     },
   ];
 
-  protected onNavigate(): void {
+  protected onNavigate(closeFinances = true): void {
+    if (closeFinances) {
+      this.financesExpanded.set(false);
+    }
+
     if (this.viewport() !== 'desktop') {
       this.navigate.emit();
     }
@@ -132,5 +139,9 @@ export class SidebarComponent {
 
   protected toggleFinances(): void {
     this.financesExpanded.update(value => !value);
+  }
+  
+  protected isFinancesActive(): boolean {
+    return this.router.url.startsWith('/finances');
   }
 }
