@@ -1,11 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, computed, signal } from '@angular/core';
+
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  computed,
+  signal,
+} from '@angular/core';
+
 import {
   BriefcaseBusiness,
   Car,
   ChevronLeft,
   ChevronRight,
   House,
+  Info,
   Lightbulb,
   LucideAngularModule,
   Pencil,
@@ -21,6 +30,7 @@ interface FinanceCategory {
   name: string;
   icon: LucideIconData;
   color: string;
+  colorName: string;
   total: number;
   type: 'Receita' | 'Despesa';
 }
@@ -37,12 +47,14 @@ interface CategoryTip {
   templateUrl: './categories.html',
 })
 export class CategoriesComponent implements OnInit, OnDestroy {
+
   private tipIntervalId: ReturnType<typeof setInterval> | null = null;
 
   protected readonly icons = {
     chevronLeft: ChevronLeft,
     chevronRight: ChevronRight,
     lightbulb: Lightbulb,
+    info: Info,
     pencil: Pencil,
     plus: Plus,
     trash: Trash2,
@@ -52,51 +64,64 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   protected readonly categories: FinanceCategory[] = [
     {
-      name: 'Alimentacao',
+      name: 'Alimentação',
       icon: Utensils,
       color: '#22C55E',
+      colorName: 'Verde',
       total: 980,
       type: 'Despesa',
     },
+
     {
       name: 'Transporte',
       icon: Car,
       color: '#3B82F6',
+      colorName: 'Azul',
       total: 560,
       type: 'Despesa',
     },
+
     {
       name: 'Moradia',
       icon: House,
       color: '#F59E0B',
+      colorName: 'Amarelo',
       total: 900,
       type: 'Despesa',
     },
+
     {
-      name: 'Saude',
+      name: 'Saúde',
       icon: Shapes,
       color: '#A855F7',
+      colorName: 'Roxo',
       total: 280,
       type: 'Despesa',
     },
+
     {
       name: 'Lazer',
       icon: ShoppingBasket,
       color: '#EC4899',
+      colorName: 'Rosa',
       total: 210,
       type: 'Despesa',
     },
+
     {
       name: 'Trabalho',
       icon: BriefcaseBusiness,
       color: '#10B981',
+      colorName: 'Verde',
       total: 5000,
       type: 'Receita',
     },
+
     {
       name: 'Outros',
       icon: Shapes,
       color: '#64748B',
+      colorName: 'Cinza',
       total: 280,
       type: 'Despesa',
     },
@@ -106,18 +131,21 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     {
       title: 'Agrupe com clareza',
       description:
-        'Use nomes simples para enxergar rapidamente para onde cada transacao deve ir.',
+        'Use nomes simples para enxergar rapidamente para onde cada transação deve ir.',
     },
+
     {
       title: 'Revise recorrentes',
       description:
-        'Assinaturas e contas fixas ficam mais faceis de acompanhar quando usam sempre a mesma categoria.',
+        'Assinaturas e contas fixas ficam mais fáceis de acompanhar quando usam sempre a mesma categoria.',
     },
+
     {
-      title: 'Compare tendencias',
+      title: 'Compare tendências',
       description:
-        'Olhe suas categorias ao longo do mes para perceber excessos antes do fechamento.',
+        'Olhe suas categorias ao longo do mês para perceber excessos antes do fechamento.',
     },
+
     {
       title: 'Mantenha enxuto',
       description:
@@ -125,7 +153,9 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     },
   ];
 
-  protected readonly currentTip = computed(() => this.tips[this.currentTipIndex()]);
+  protected readonly currentTip = computed(
+    () => this.tips[this.currentTipIndex()]
+  );
 
   ngOnInit(): void {
     this.startTipRotation();
@@ -137,26 +167,27 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected formatCurrency(value: number): string {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(value);
-  }
-
   protected previousTip(): void {
-    this.currentTipIndex.update((index) => (index === 0 ? this.tips.length - 1 : index - 1));
+    this.currentTipIndex.update((index) =>
+      index === 0 ? this.tips.length - 1 : index - 1
+    );
+
     this.restartTipRotation();
   }
 
   protected nextTip(): void {
-    this.currentTipIndex.update((index) => (index + 1) % this.tips.length);
+    this.currentTipIndex.update(
+      (index) => (index + 1) % this.tips.length
+    );
+
     this.restartTipRotation();
   }
 
   private startTipRotation(): void {
     this.tipIntervalId = setInterval(() => {
-      this.currentTipIndex.update((index) => (index + 1) % this.tips.length);
+      this.currentTipIndex.update(
+        (index) => (index + 1) % this.tips.length
+      );
     }, 10000);
   }
 

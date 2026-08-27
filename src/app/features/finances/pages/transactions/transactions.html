@@ -1,0 +1,522 @@
+<div class="mx-auto flex max-w-7xl flex-col gap-5 text-white">
+
+  <!-- Cabeçalho -->
+  <section
+    class="app-shadow animate-fade-in flex flex-col gap-4 rounded-2xl border border-border bg-panel p-5 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <div>
+      <h1 class="text-2xl font-black text-white">
+        Transações
+      </h1>
+
+      <p class="mt-1 text-sm text-text-secondary">
+        Gerencie suas receitas e despesas.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="flex h-10 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-bold text-white transition hover:bg-primary-hover active:bg-primary-active"
+    >
+      <lucide-icon
+        [img]="icons.plus"
+        size="17"
+      ></lucide-icon>
+
+      <span>
+        Nova transação
+      </span>
+    </button>
+  </section>
+
+
+  <!-- Resumo financeiro -->
+  <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+
+    @for (summary of summaries; track summary.label) {
+
+      <article
+        class="app-shadow animate-fade-in rounded-2xl border border-border bg-panel p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-border-hover"
+      >
+        <div class="flex items-center gap-4">
+
+          <!-- Ícone -->
+          <span
+            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border"
+            [ngClass]="summaryToneClasses(summary.tone)"
+          >
+            <lucide-icon
+              [img]="summary.icon"
+              size="24"
+            ></lucide-icon>
+          </span>
+
+          <!-- Informações -->
+          <div class="min-w-0">
+
+            <p class="text-sm font-black text-text-secondary">
+              {{ summary.label }}
+            </p>
+
+            <p
+              class="mt-1 truncate text-2xl font-black"
+              [class.text-success]="summary.tone === 'success'"
+              [class.text-error]="summary.tone === 'error'"
+              [class.text-info]="summary.tone === 'info'"
+              [class.text-accent]="summary.tone === 'accent'"
+            >
+              {{ summary.value }}
+            </p>
+
+            <p class="mt-1 text-xs font-bold text-text-tertiary">
+              {{ summary.hint }}
+            </p>
+
+          </div>
+        </div>
+      </article>
+
+    }
+
+  </section>
+
+
+  <!-- Transações -->
+  <section
+    class="app-shadow animate-fade-in overflow-hidden rounded-2xl border border-border bg-panel"
+  >
+
+    <!-- Filtros -->
+    <div
+      class="flex flex-col gap-3 border-b border-border p-4 xl:flex-row xl:items-center"
+    >
+
+      <!-- Busca -->
+      <label
+        class="flex h-11 min-w-0 items-center gap-3 rounded-lg border border-input-border bg-input-background px-3 text-text-tertiary transition focus-within:border-input-focus xl:w-64"
+      >
+        <input
+          type="search"
+          class="min-w-0 flex-1 bg-transparent text-sm font-semibold text-white outline-none placeholder:text-placeholder"
+          placeholder="Buscar transação..."
+        />
+
+        <lucide-icon
+          [img]="icons.search"
+          size="17"
+        ></lucide-icon>
+      </label>
+
+
+      <!-- Tipo -->
+      <button
+        type="button"
+        class="flex h-11 items-center justify-between gap-4 rounded-lg border border-input-border bg-input-background px-4 text-sm font-bold text-text-secondary transition hover:border-border-hover hover:text-white xl:w-40"
+      >
+        <span class="text-text-tertiary">
+          Tipo
+        </span>
+
+        <span class="text-white">
+          Todos
+        </span>
+
+        <lucide-icon
+          [img]="icons.chevronDown"
+          size="16"
+        ></lucide-icon>
+      </button>
+
+
+      <!-- Categoria -->
+      <button
+        type="button"
+        class="flex h-11 items-center justify-between gap-4 rounded-lg border border-input-border bg-input-background px-4 text-sm font-bold text-text-secondary transition hover:border-border-hover hover:text-white xl:w-52"
+      >
+        <span class="text-text-tertiary">
+          Categoria
+        </span>
+
+        <span class="text-white">
+          Todas
+        </span>
+
+        <lucide-icon
+          [img]="icons.chevronDown"
+          size="16"
+        ></lucide-icon>
+      </button>
+
+
+      <!-- Período -->
+      <div class="grid gap-3 sm:grid-cols-[auto_minmax(0,1fr)] xl:flex">
+
+        <button
+          type="button"
+          class="flex h-11 items-center justify-center rounded-lg border border-input-border bg-input-background px-4 text-sm font-bold text-text-secondary transition hover:border-border-hover hover:text-white"
+        >
+          Período
+        </button>
+
+        <button
+          type="button"
+          class="flex h-11 items-center justify-between gap-4 rounded-lg border border-input-border bg-input-background px-4 text-sm font-bold text-white transition hover:border-border-hover xl:w-64"
+        >
+          <span>
+            01/08/2026 - 31/08/2026
+          </span>
+
+          <lucide-icon
+            [img]="icons.calendar"
+            size="17"
+            class="text-text-tertiary"
+          ></lucide-icon>
+        </button>
+
+      </div>
+
+
+      <!-- Limpar filtros -->
+      <button
+        type="button"
+        class="flex h-11 items-center justify-center rounded-lg border border-input-border bg-input-background px-4 text-sm font-bold text-text-secondary transition hover:border-border-hover hover:text-white xl:ml-auto"
+      >
+        Limpar filtros
+      </button>
+
+    </div>
+
+
+    <!-- Tabela -->
+    <div class="overflow-x-auto">
+
+      <table class="w-full min-w-[1020px] border-collapse text-left">
+
+        <!-- Cabeçalho -->
+        <thead class="border-b border-border bg-surface">
+
+          <tr
+            class="text-xs font-black uppercase tracking-[0.08em] text-text-tertiary"
+          >
+            <th class="px-5 py-4">
+              Descrição
+            </th>
+
+            <th class="px-5 py-4">
+              Categoria
+            </th>
+
+            <th class="px-5 py-4">
+              Tipo
+            </th>
+
+            <th class="px-5 py-4">
+              Valor
+            </th>
+
+            <th class="px-5 py-4">
+              Data
+            </th>
+
+            <th class="px-5 py-4">
+              Forma de pagamento
+            </th>
+
+            <th class="px-5 py-4 text-right">
+              Ações
+            </th>
+          </tr>
+
+        </thead>
+
+
+        <!-- Dados -->
+        <tbody class="divide-y divide-border">
+
+          @for (transaction of transactions; track transaction.description) {
+
+            <tr
+              class="transition-colors duration-150 hover:bg-white/[0.03]"
+            >
+
+              <!-- Descrição -->
+              <td class="px-5 py-4">
+
+                <div class="flex items-center gap-3">
+
+                  <span
+                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border"
+                    [ngStyle]="{
+                      color: transaction.category.color,
+                      backgroundColor: transaction.category.color + '22',
+                      borderColor: transaction.category.color + '33'
+                    }"
+                  >
+                    <lucide-icon
+                      [img]="transaction.category.icon"
+                      size="17"
+                    ></lucide-icon>
+                  </span>
+
+                  <span class="text-sm font-bold text-white">
+                    {{ transaction.description }}
+                  </span>
+
+                </div>
+
+              </td>
+
+
+              <!-- Categoria -->
+              <td class="px-5 py-4">
+
+                <div class="flex items-center gap-3">
+
+                  <span
+                    class="h-2.5 w-2.5 shrink-0 rounded-full"
+                    [ngStyle]="{
+                      backgroundColor: transaction.category.color
+                    }"
+                  ></span>
+
+                  <span class="text-sm font-semibold text-text-secondary">
+                    {{ transaction.category.name }}
+                  </span>
+
+                </div>
+
+              </td>
+
+
+              <!-- Tipo -->
+              <td class="px-5 py-4">
+
+                <div
+                  class="flex items-center gap-2 text-sm font-bold"
+                  [class.text-success]="transaction.type === 'Receita'"
+                  [class.text-error]="transaction.type === 'Despesa'"
+                >
+
+                  <lucide-icon
+                    [img]="typeIcon(transaction.type)"
+                    size="15"
+                  ></lucide-icon>
+
+                  <span class="text-text-secondary">
+                    {{ transaction.type }}
+                  </span>
+
+                </div>
+
+              </td>
+
+
+              <!-- Valor -->
+              <td class="px-5 py-4">
+
+                <span
+                  class="text-sm font-black"
+                  [class.text-success]="transaction.type === 'Receita'"
+                  [class.text-error]="transaction.type === 'Despesa'"
+                >
+                  {{ formatCurrency(transaction.value) }}
+                </span>
+
+              </td>
+
+
+              <!-- Data -->
+              <td
+                class="px-5 py-4 text-sm font-semibold text-text-secondary"
+              >
+                {{ transaction.date }}
+              </td>
+
+
+              <!-- Forma de pagamento -->
+              <td class="px-5 py-4">
+
+                <div
+                  class="flex items-center gap-3 text-sm font-semibold text-text-secondary"
+                >
+
+                  <lucide-icon
+                    [img]="transaction.paymentMethod.icon"
+                    size="16"
+                    class="text-text-tertiary"
+                  ></lucide-icon>
+
+                  <span>
+                    {{ transaction.paymentMethod.label }}
+                  </span>
+
+                </div>
+
+              </td>
+
+
+              <!-- Ações -->
+              <td class="px-5 py-4">
+
+                <div class="flex justify-end gap-2">
+
+                  <button
+                    type="button"
+                    class="flex h-9 w-9 items-center justify-center rounded-lg border border-emerald-400/20 bg-emerald-400/10 text-emerald-300 transition hover:border-emerald-400/35 hover:bg-emerald-400/15"
+                    title="Editar transação"
+                  >
+                    <lucide-icon
+                      [img]="icons.pencil"
+                      size="16"
+                    ></lucide-icon>
+                  </button>
+
+                  <button
+                    type="button"
+                    class="flex h-9 w-9 items-center justify-center rounded-lg border border-rose-400/20 bg-rose-400/10 text-rose-300 transition hover:border-rose-400/35 hover:bg-rose-400/15"
+                    title="Excluir transação"
+                  >
+                    <lucide-icon
+                      [img]="icons.trash"
+                      size="16"
+                    ></lucide-icon>
+                  </button>
+
+                </div>
+
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <!-- Rodapé / Paginação -->
+    <div
+      class="flex flex-col gap-4 border-t border-border px-4 py-4 text-sm font-semibold text-text-tertiary lg:flex-row lg:items-center lg:justify-between"
+    >
+
+      <span>
+        Mostrando 1 a 5 de 42 transações
+      </span>
+
+
+      <div
+        class="flex flex-col flex-wrap gap-3 sm:flex-row sm:items-center lg:gap-8"
+      >
+
+        <!-- Paginação -->
+        <nav
+          class="flex flex-wrap items-center gap-2"
+          aria-label="Paginação"
+        >
+
+          <button
+            type="button"
+            class="flex h-9 w-9 items-center justify-center rounded-lg border border-input-border bg-input-background text-text-secondary transition hover:border-border-hover hover:text-white"
+            title="Primeira página"
+          >
+            <lucide-icon
+              [img]="icons.chevronsLeft"
+              size="16"
+            ></lucide-icon>
+          </button>
+
+          <button
+            type="button"
+            class="flex h-9 w-9 items-center justify-center rounded-lg border border-input-border bg-input-background text-text-secondary transition hover:border-border-hover hover:text-white"
+            title="Página anterior"
+          >
+            <lucide-icon
+              [img]="icons.chevronLeft"
+              size="16"
+            ></lucide-icon>
+          </button>
+
+
+          @for (item of pageItems; track $index) {
+
+            @if (item === 'ellipsis') {
+
+              <span
+                class="flex h-9 w-9 items-center justify-center text-text-tertiary"
+              >
+                ...
+              </span>
+
+            } @else {
+
+              <button
+                type="button"
+                class="flex h-9 w-9 items-center justify-center rounded-lg border text-sm font-black transition"
+                [class.border-primary]="item === 1"
+                [class.bg-primary]="item === 1"
+                [class.text-white]="item === 1"
+                [class.border-input-border]="item !== 1"
+                [class.bg-input-background]="item !== 1"
+                [class.text-text-secondary]="item !== 1"
+                [class.hover:border-border-hover]="item !== 1"
+                [class.hover:text-white]="item !== 1"
+              >
+                {{ item }}
+              </button>
+
+            }
+
+          }
+
+
+          <button
+            type="button"
+            class="flex h-9 w-9 items-center justify-center rounded-lg border border-input-border bg-input-background text-text-secondary transition hover:border-border-hover hover:text-white"
+            title="Próxima página"
+          >
+            <lucide-icon
+              [img]="icons.chevronRight"
+              size="16"
+            ></lucide-icon>
+          </button>
+
+          <button
+            type="button"
+            class="flex h-9 w-9 items-center justify-center rounded-lg border border-input-border bg-input-background text-text-secondary transition hover:border-border-hover hover:text-white"
+            title="Última página"
+          >
+            <lucide-icon
+              [img]="icons.chevronsRight"
+              size="16"
+            ></lucide-icon>
+          </button>
+
+        </nav>
+
+
+        <!-- Itens por página -->
+        <button
+          type="button"
+          class="flex h-9 items-center justify-between gap-4 rounded-lg border border-input-border bg-input-background px-4 text-sm font-bold text-white transition hover:border-border-hover sm:w-40"
+        >
+          <span>
+            5 por página
+          </span>
+
+          <lucide-icon
+            [img]="icons.chevronDown"
+            size="16"
+            class="text-text-tertiary"
+          ></lucide-icon>
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
