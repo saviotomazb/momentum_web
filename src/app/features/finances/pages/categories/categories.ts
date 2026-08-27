@@ -9,12 +9,15 @@ import {
 } from '@angular/core';
 
 import {
+  BarChart3,
   BriefcaseBusiness,
+  Calendar,
   Car,
   ChevronLeft,
   ChevronRight,
   House,
   Info,
+  Layers,
   Lightbulb,
   LucideAngularModule,
   Pencil,
@@ -38,6 +41,7 @@ interface FinanceCategory {
 interface CategoryTip {
   title: string;
   description: string;
+  icon: LucideIconData;
 }
 
 @Component({
@@ -132,24 +136,28 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       title: 'Agrupe com clareza',
       description:
         'Use nomes simples para enxergar rapidamente para onde cada transação deve ir.',
+      icon: Shapes,
     },
 
     {
       title: 'Revise recorrentes',
       description:
         'Assinaturas e contas fixas ficam mais fáceis de acompanhar quando usam sempre a mesma categoria.',
+      icon: Calendar,
     },
 
     {
       title: 'Compare tendências',
       description:
         'Olhe suas categorias ao longo do mês para perceber excessos antes do fechamento.',
+      icon: BarChart3,
     },
 
     {
       title: 'Mantenha enxuto',
       description:
         'Categorias demais dificultam a leitura. Una itens parecidos quando fizer sentido.',
+      icon: Layers,
     },
   ];
 
