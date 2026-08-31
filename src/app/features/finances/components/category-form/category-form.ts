@@ -4,12 +4,12 @@ import {
   FormBuilder,
   Validators,
 } from '@angular/forms';
-
 import {
   ArrowLeft,
   BriefcaseBusiness,
   Car,
   Check,
+  ChevronRight,
   Dumbbell,
   Gamepad2,
   GraduationCap,
@@ -20,13 +20,11 @@ import {
   Music,
   PawPrint,
   Pencil,
-  Plus,
   Save,
   Shirt,
   ShoppingCart,
   Sparkles,
   Utensils,
-  X,
   type LucideIconData,
 } from 'lucide-angular';
 
@@ -68,10 +66,8 @@ export class CategoryFormComponent {
   protected readonly icons = {
     arrowLeft: ArrowLeft,
     check: Check,
-    chevronRight: ArrowLeft,
-    close: X,
+    chevronRight: ChevronRight,
     pencil: Pencil,
-    plus: Plus,
     save: Save,
   };
 
@@ -222,7 +218,7 @@ export class CategoryFormComponent {
 
     return (
       this.availableIcons.find(
-        icon => icon.name === iconName,
+        (icon) => icon.name === iconName,
       )?.value ?? this.availableIcons[0].value
     );
   }
@@ -232,7 +228,7 @@ export class CategoryFormComponent {
 
     return (
       this.colors.find(
-        color => color.value === colorValue,
+        (color) => color.value === colorValue,
       )?.name ?? this.colors[0].name
     );
   }
