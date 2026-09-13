@@ -1,0 +1,30 @@
+<div
+  class="fixed top-6 right-6 z-50 flex w-[calc(100vw-2rem)] max-w-sm flex-col gap-3 sm:w-96"
+>
+  @for (
+    toast of notificationService.toasts();
+    track toast.id
+  ) {
+    <div
+      class="flex items-start justify-between gap-4 rounded-xl px-5 py-4 text-white shadow-lg"
+      [class.bg-green-600]="toast.type === 'success'"
+      [class.bg-red-600]="toast.type === 'error'"
+      [class.bg-amber-600]="toast.type === 'warning'"
+      [class.bg-blue-600]="toast.type === 'info'"
+      role="alert"
+    >
+      <span class="flex-1 leading-relaxed">
+        {{ toast.message }}
+      </span>
+
+      <button
+        type="button"
+        class="text-xl leading-none opacity-80 transition-opacity hover:opacity-100"
+        aria-label="Fechar notificação"
+        (click)="remove(toast.id)"
+      >
+        ×
+      </button>
+    </div>
+  }
+</div>
