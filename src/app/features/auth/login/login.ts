@@ -24,7 +24,6 @@ export class LoginComponent {
 
   protected readonly loginForm: FormGroup;
   protected readonly isLoading = signal(false);
-  protected readonly errorMessage = signal<string | null>(null);
   protected readonly showPassword = signal(false);
 
   constructor() {
@@ -46,7 +45,6 @@ export class LoginComponent {
     }
 
     this.isLoading.set(true);
-    this.errorMessage.set(null);
 
     const { email, password } = this.loginForm.value;
 
@@ -55,16 +53,8 @@ export class LoginComponent {
         this.isLoading.set(false);
         this.router.navigate(['/dashboard']);
       },
-      error: (err) => {
+      error: () => {
         this.isLoading.set(false);
-
-        const message =
-          err.error?.message ||
-          err.error ||
-          err.message ||
-          'Falha ao autenticar. Verifique suas credenciais.';
-
-        this.errorMessage.set(message);
       },
     });
   }
@@ -72,6 +62,10 @@ export class LoginComponent {
   protected isFieldInvalid(fieldName: string): boolean {
     const field = this.loginForm.get(fieldName);
 
-    return !!(field && field.invalid && (field.dirty || field.touched));
+    return !!(
+      field &&
+      field.invalid &&
+      (field.dirty || field.touched)
+    );
   }
 }
