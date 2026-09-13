@@ -1,12 +1,20 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+
+import { Router } from '@angular/router';
+
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.html',
 })
 export class LoginComponent {
@@ -49,11 +57,13 @@ export class LoginComponent {
       },
       error: (err) => {
         this.isLoading.set(false);
+
         const message =
           err.error?.message ||
           err.error ||
           err.message ||
           'Falha ao autenticar. Verifique suas credenciais.';
+
         this.errorMessage.set(message);
       },
     });
@@ -61,6 +71,7 @@ export class LoginComponent {
 
   protected isFieldInvalid(fieldName: string): boolean {
     const field = this.loginForm.get(fieldName);
+
     return !!(field && field.invalid && (field.dirty || field.touched));
   }
 }

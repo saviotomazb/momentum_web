@@ -98,22 +98,7 @@
 
   @if (!isLoading() && habits().length) {
     <section class="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
-      <app-analytics-chart
-        title="Streak por habito"
-        subtitle="Compare a consistencia atual das suas rotinas."
-        [labels]="streakChart().labels"
-        [values]="streakChart().values"
-        type="bar"
-        color="#7C3AED"
-      ></app-analytics-chart>
 
-      <app-analytics-chart
-        title="Conclusoes totais"
-        subtitle="Distribuicao por habito."
-        [labels]="completionsChart().labels"
-        [values]="completionsChart().values"
-        type="doughnut"
-      ></app-analytics-chart>
     </section>
   }
 

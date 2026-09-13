@@ -11,8 +11,6 @@ import {
 } from 'lucide-angular';
 import { finalize } from 'rxjs';
 
-import { ToastService } from '../../../../core/services/toast.service';
-import { AnalyticsChartComponent } from '../../../../shared/components/analytics-chart/analytics-chart';
 import { HabitFormComponent } from '../../components/habit-form/habit-form';
 import { HabitListComponent } from '../../components/habit-list/habit-list';
 import { HabitFormValue } from '../../interfaces/habit-request.interface';
@@ -24,7 +22,6 @@ import { HabitsService } from '../../services/habits.service';
   standalone: true,
   imports: [
     CommonModule,
-    AnalyticsChartComponent,
     HabitFormComponent,
     HabitListComponent,
     LucideAngularModule,
@@ -33,7 +30,6 @@ import { HabitsService } from '../../services/habits.service';
 })
 export class HabitsPageComponent implements OnInit {
   private readonly habitsService = inject(HabitsService);
-  private readonly toastService = inject(ToastService);
 
   protected readonly habits = signal<Habit[]>([]);
   protected readonly isLoading = signal(true);
@@ -99,7 +95,6 @@ export class HabitsPageComponent implements OnInit {
         error: () => {
           const message = 'Nao foi possivel carregar seus habitos agora.';
           this.errorMessage.set(message);
-          this.toastService.error(message);
         },
       });
   }
@@ -132,17 +127,14 @@ export class HabitsPageComponent implements OnInit {
       next: (savedHabit) => {
         if (habit) {
           this.replaceHabit(savedHabit);
-          this.toastService.success('Habito atualizado com sucesso.');
         } else {
           this.habits.update((habits) => [savedHabit, ...habits]);
-          this.toastService.success('Habito criado com sucesso.');
         }
         this.closeForm();
       },
       error: () => {
         const message = 'Nao foi possivel salvar o habito.';
         this.errorMessage.set(message);
-        this.toastService.error(message);
       },
     });
   }
@@ -170,13 +162,11 @@ export class HabitsPageComponent implements OnInit {
       .subscribe({
         next: (completedHabit) => {
           this.replaceHabit(completedHabit);
-          this.toastService.success('Habito concluido hoje.');
         },
         error: () => {
           const message = 'Nao foi possivel concluir o habito. Tente novamente.';
           this.habits.set(previousHabits);
           this.errorMessage.set(message);
-          this.toastService.error(message);
         },
       });
   }
@@ -187,12 +177,10 @@ export class HabitsPageComponent implements OnInit {
     this.errorMessage.set(null);
 
     this.habitsService.delete(habit.id).subscribe({
-      next: () => this.toastService.info('Habito excluido.'),
       error: () => {
         const message = 'Nao foi possivel excluir o habito.';
         this.habits.set(previousHabits);
         this.errorMessage.set(message);
-        this.toastService.error(message);
       },
     });
   }
