@@ -1,9 +1,10 @@
-import { Component, effect, inject, input, output } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import {
   ReactiveFormsModule,
   FormBuilder,
   Validators,
 } from '@angular/forms';
+
 import {
   ArrowLeft,
   BriefcaseBusiness,
@@ -28,8 +29,7 @@ import {
   type LucideIconData,
 } from 'lucide-angular';
 
-export interface CategoryFormData {
-  id?: string;
+export interface CreateCategoryData {
   name: string;
   color: string;
   icon: string;
@@ -46,21 +46,18 @@ interface CategoryIcon {
 }
 
 @Component({
-  selector: 'app-category-form',
+  selector: 'app-category-create',
   standalone: true,
   imports: [
     ReactiveFormsModule,
     LucideAngularModule,
   ],
-  templateUrl: './category-form.html',
+  templateUrl: './category-create.html',
 })
-export class CategoryFormComponent {
+export class CategoryCreateComponent {
   private readonly formBuilder = inject(FormBuilder);
 
-  readonly category = input<CategoryFormData | null>(null);
-
-  readonly save = output<CategoryFormData>();
-
+  readonly save = output<CreateCategoryData>();
   readonly cancel = output<void>();
 
   protected readonly icons = {
@@ -187,32 +184,6 @@ export class CategoryFormComponent {
     ],
   });
 
-  constructor() {
-    effect(() => {
-      const category = this.category();
-
-      if (category) {
-        this.form.patchValue({
-          name: category.name,
-          color: category.color,
-          icon: category.icon,
-        });
-
-        return;
-      }
-
-      this.form.reset({
-        name: '',
-        color: this.colors[0].value,
-        icon: this.availableIcons[0].name,
-      });
-    });
-  }
-
-  protected isEditMode(): boolean {
-    return !!this.category()?.id;
-  }
-
   protected selectedIcon(): LucideIconData {
     const iconName = this.form.controls.icon.value;
 
@@ -250,7 +221,6 @@ export class CategoryFormComponent {
     const value = this.form.getRawValue();
 
     this.save.emit({
-      id: this.category()?.id,
       name: value.name.trim(),
       color: value.color,
       icon: value.icon,

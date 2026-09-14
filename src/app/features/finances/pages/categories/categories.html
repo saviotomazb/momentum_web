@@ -1,9 +1,16 @@
-@if (showForm()) {
-  <app-category-form
-    [category]="editingCategory()"
-    (save)="saveCategory($event)"
+@if (formMode() === 'create') {
+  <app-category-create
+    (save)="createCategory($event)"
     (cancel)="closeForm()"
   />
+} @else if (formMode() === 'edit') {
+  @if (editingCategory(); as category) {
+    <app-category-edit
+      [category]="category"
+      (save)="updateCategory($event)"
+      (cancel)="closeForm()"
+    />
+  }
 } @else {
   <div class="mx-auto flex max-w-7xl flex-col gap-5 text-white">
 
@@ -12,12 +19,25 @@
       class="app-shadow animate-fade-in flex flex-col gap-4 rounded-2xl border border-border bg-panel p-5 sm:flex-row sm:items-center sm:justify-between"
     >
       <div>
+        <div class="mb-2 flex items-center gap-2 text-sm text-text-tertiary">
+          <span>Finanças</span>
+
+          <lucide-icon
+            [img]="icons.chevronRight"
+            [size]="14"
+          />
+
+          <span class="text-text-secondary">
+            Categorias
+          </span>
+        </div>
+
         <h1 class="text-2xl font-black text-white">
           Categorias
         </h1>
 
         <p class="mt-1 text-sm text-text-secondary">
-          Organize suas transações por categorias.
+          Organize suas transações de forma simples e visual.
         </p>
       </div>
 
@@ -28,116 +48,161 @@
       >
         <lucide-icon
           [img]="icons.plus"
-          size="17"
-        ></lucide-icon>
+          [size]="17"
+        />
 
         <span>Nova categoria</span>
       </button>
     </section>
 
-    <!-- Conteúdo -->
+    <!-- Categorias -->
     <section
-      class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px]"
+      class="app-shadow animate-fade-in overflow-hidden rounded-2xl border border-border bg-panel"
     >
-
-      <!-- Tabela -->
+      <!-- Busca -->
       <div
-        class="app-shadow animate-fade-in overflow-hidden rounded-2xl border border-border bg-panel"
+        class="flex flex-col gap-3 border-b border-border p-4 sm:flex-row sm:items-center sm:justify-between"
       >
-        <div class="overflow-x-auto">
+        <label
+          class="flex h-11 min-w-0 items-center gap-3 rounded-lg border border-input-border bg-input-background px-3 text-text-tertiary transition focus-within:border-input-focus sm:w-80"
+        >
+          <lucide-icon
+            [img]="icons.search"
+            [size]="17"
+          />
 
-          <table
-            class="min-w-[700px] w-full border-collapse text-left"
+          <input
+            type="search"
+            class="min-w-0 flex-1 bg-transparent text-sm font-semibold text-white outline-none placeholder:text-placeholder"
+            placeholder="Buscar categoria..."
+            [value]="searchTerm()"
+            (input)="updateSearchTerm($any($event.target).value)"
+          />
+        </label>
+
+        @if (searchTerm()) {
+          <span class="text-xs font-semibold text-text-tertiary">
+            {{ filteredCategories().length }}
+            {{ filteredCategories().length === 1 ? 'categoria encontrada' : 'categorias encontradas' }}
+          </span>
+        }
+      </div>
+
+      <!-- Conteúdo -->
+      @if (loading()) {
+        <div class="flex min-h-64 items-center justify-center">
+          <span class="text-sm text-text-secondary">
+            Carregando categorias...
+          </span>
+        </div>
+      } @else if (categories().length === 0) {
+        <div class="flex min-h-64 flex-col items-center justify-center px-6 text-center">
+          <div
+            class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-surface text-text-secondary"
           >
-            <thead
-              class="border-b border-border bg-surface"
-            >
-              <tr
-                class="text-xs font-black uppercase tracking-[0.08em] text-text-tertiary"
-              >
-                <th class="px-5 py-4">
-                  Nome
-                </th>
+            <lucide-icon
+              [img]="icons.pencil"
+              [size]="22"
+            />
+          </div>
 
-                <th class="px-5 py-4">
-                  Ícone
-                </th>
+          <h2 class="text-base font-medium text-white">
+            Nenhuma categoria cadastrada
+          </h2>
 
-                <th class="px-5 py-4">
-                  Cor
-                </th>
+          <p class="mt-1 max-w-md text-sm text-text-secondary">
+            Crie sua primeira categoria para começar a organizar
+            suas transações.
+          </p>
 
-                <th class="px-5 py-4 text-right">
-                  Ações
-                </th>
+          <button
+            type="button"
+            class="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-bold text-white transition hover:bg-primary-hover active:bg-primary-active"
+            (click)="openCreateForm()"
+          >
+            <lucide-icon
+              [img]="icons.plus"
+              [size]="17"
+            />
+
+            <span>Criar categoria</span>
+          </button>
+        </div>
+      } @else if (filteredCategories().length === 0) {
+        <div class="flex min-h-48 flex-col items-center justify-center px-6 text-center">
+          <div
+            class="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-surface text-text-tertiary"
+          >
+            <lucide-icon
+              [img]="icons.search"
+              [size]="20"
+            />
+          </div>
+
+          <h2 class="text-base font-medium text-white">
+            Nenhuma categoria encontrada
+          </h2>
+
+          <p class="mt-1 text-sm text-text-secondary">
+            Não encontramos categorias para
+            <span class="font-semibold text-white">
+              "{{ searchTerm() }}"
+            </span>.
+          </p>
+        </div>
+      } @else {
+        <!-- Lista -->
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[620px] border-collapse text-left">
+            <!-- Cabeçalho -->
+            <thead class="border-b border-border bg-surface">
+              <tr class="text-xs font-black uppercase tracking-[0.08em] text-text-tertiary">
+                <th class="px-5 py-4">Categoria</th>
+                <th class="px-5 py-4">Ícone</th>
+                <th class="px-5 py-4">Cor</th>
+                <th class="px-5 py-4">Ações</th>
               </tr>
             </thead>
 
-            <tbody
-              class="divide-y divide-border"
-            >
-              @for (
-                category of categories();
-                track category.id
-              ) {
+            <!-- Dados -->
+            <tbody class="divide-y divide-border">
+              @for (category of filteredCategories(); track category.id) {
                 <tr
-                  class="transition hover:bg-white/[0.03]"
+                  class="transition-colors duration-150 hover:bg-white/[0.03]"
                 >
-
-                  <!-- Nome -->
-                  <td
-                    class="px-5 py-4 text-sm font-bold text-white"
-                  >
-                    {{ category.name }}
+                  <!-- Categoria -->
+                  <td class="px-5 py-4">
+                    <span class="text-sm font-bold text-white">
+                      {{ category.name }}
+                    </span>
                   </td>
 
                   <!-- Ícone -->
                   <td class="px-5 py-4">
-                    <span
-                      class="flex h-9 w-9 items-center justify-center rounded-full"
-                      [ngStyle]="{
-                        color: category.color,
-                        backgroundColor: category.color + '22',
-                        border:
-                          '1px solid ' +
-                          category.color +
-                          '33'
-                      }"
-                    >
-                      <lucide-icon
-                        [img]="getCategoryIcon(category)"
-                        size="18"
-                      ></lucide-icon>
-                    </span>
+                    <lucide-icon
+                      [img]="getCategoryIcon(category)"
+                      [size]="20"
+                      class="text-text-secondary"
+                    />
                   </td>
 
                   <!-- Cor -->
                   <td class="px-5 py-4">
-                    <div
-                      class="flex items-center gap-3"
-                    >
+                    <div class="flex items-center gap-3">
                       <span
-                        class="h-3.5 w-3.5 rounded"
-                        [ngStyle]="{
-                          backgroundColor:
-                            category.color
-                        }"
+                        class="h-3 w-3 shrink-0 rounded-full"
+                        [style.background-color]="category.color"
                       ></span>
 
-                      <span
-                        class="text-xs font-bold text-text-tertiary"
-                      >
-
+                      <span class="text-sm font-semibold text-text-secondary">
+                        {{ getColorName(category.color) }}
                       </span>
                     </div>
                   </td>
 
                   <!-- Ações -->
                   <td class="px-5 py-4">
-                    <div
-                      class="flex justify-end gap-2"
-                    >
-
+                    <div class="flex gap-2">
                       <button
                         type="button"
                         class="flex h-9 w-9 items-center justify-center rounded-lg border border-emerald-400/20 bg-emerald-400/10 text-emerald-300 transition hover:border-emerald-400/35 hover:bg-emerald-400/15"
@@ -146,8 +211,8 @@
                       >
                         <lucide-icon
                           [img]="icons.pencil"
-                          size="16"
-                        ></lucide-icon>
+                          [size]="16"
+                        />
                       </button>
 
                       <button
@@ -158,120 +223,112 @@
                       >
                         <lucide-icon
                           [img]="icons.trash"
-                          size="16"
-                        ></lucide-icon>
+                          [size]="16"
+                        />
                       </button>
-
                     </div>
                   </td>
-
                 </tr>
               }
             </tbody>
           </table>
-
         </div>
 
         <!-- Rodapé -->
         <div
           class="border-t border-border px-5 py-4 text-sm font-semibold text-text-tertiary"
         >
-          Mostrando 1 a
-          {{ categories().length }}
-          de
-          {{ categories().length }}
-          categorias
+          @if (searchTerm()) {
+            Mostrando
+            {{ filteredCategories().length }}
+            de
+            {{ categories().length }}
+            {{ categories().length === 1 ? 'categoria' : 'categorias' }}
+          } @else {
+            Mostrando
+            {{ categories().length }}
+            {{ categories().length === 1 ? 'categoria' : 'categorias' }}
+          }
+        </div>
+      }
+    </section>
+
+    <!-- Dica -->
+    <section
+      class="app-shadow animate-fade-in rounded-2xl border border-border bg-panel p-5"
+    >
+      <div class="flex items-start gap-4">
+        <div
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"
+        >
+          <lucide-icon
+            [img]="currentTip().icon"
+            [size]="19"
+          />
+        </div>
+
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-xs font-medium uppercase tracking-wider text-text-tertiary">
+                Dica
+              </p>
+
+              <h2 class="mt-1 text-sm font-medium text-white">
+                {{ currentTip().title }}
+              </h2>
+            </div>
+
+            <div class="flex shrink-0 items-center gap-1">
+              <button
+                type="button"
+                class="flex h-8 w-8 items-center justify-center rounded-lg text-text-tertiary transition hover:bg-surface hover:text-white"
+                title="Dica anterior"
+                (click)="previousTip()"
+              >
+                <lucide-icon
+                  [img]="icons.chevronLeft"
+                  [size]="17"
+                />
+              </button>
+
+              <button
+                type="button"
+                class="flex h-8 w-8 items-center justify-center rounded-lg text-text-tertiary transition hover:bg-surface hover:text-white"
+                title="Próxima dica"
+                (click)="nextTip()"
+              >
+                <lucide-icon
+                  [img]="icons.chevronRight"
+                  [size]="17"
+                />
+              </button>
+            </div>
+          </div>
+
+          <p class="mt-2 text-sm leading-relaxed text-text-secondary">
+            {{ currentTip().description }}
+          </p>
         </div>
       </div>
-
-      <!-- Dicas -->
-      <aside class="flex">
-        <section
-          class="app-shadow animate-fade-in flex w-full flex-col overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-panel to-surface p-5"
-        >
-
-          <div class="flex items-center gap-2">
-            <lucide-icon
-              [img]="currentTip().icon"
-              size="18"
-              class="text-primary"
-            ></lucide-icon>
-
-            <h2 class="text-sm font-black text-white">
-              Dicas
-            </h2>
-          </div>
-
-          <div class="flex flex-1 items-center py-8">
-            <div>
-              <p class="text-lg font-black text-white">
-                {{ currentTip().title }}
-              </p>
-
-              <p
-                class="mt-3 text-sm font-semibold leading-6 text-text-secondary"
-              >
-                {{ currentTip().description }}
-              </p>
-            </div>
-          </div>
-
-          <div
-            class="flex items-center justify-between border-t border-border pt-5"
-          >
-
-            <button
-              type="button"
-              class="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface text-text-secondary transition hover:border-primary/40 hover:bg-primary/10 hover:text-primary"
-              title="Dica anterior"
-              (click)="previousTip()"
-            >
-              <lucide-icon
-                [img]="icons.chevronLeft"
-                size="18"
-              ></lucide-icon>
-            </button>
-
-            <div class="flex gap-1.5">
-              @for (
-                tip of tips;
-                track tip.title;
-                let index = $index
-              ) {
-                <span
-                  class="h-1.5 rounded-full transition-all"
-                  [class.w-5]="
-                    index === currentTipIndex()
-                  "
-                  [class.w-1.5]="
-                    index !== currentTipIndex()
-                  "
-                  [class.bg-primary]="
-                    index === currentTipIndex()
-                  "
-                  [class.bg-border-hover]="
-                    index !== currentTipIndex()
-                  "
-                ></span>
-              }
-            </div>
-
-            <button
-              type="button"
-              class="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface text-text-secondary transition hover:border-primary/40 hover:bg-primary/10 hover:text-primary"
-              title="Próxima dica"
-              (click)="nextTip()"
-            >
-              <lucide-icon
-                [img]="icons.chevronRight"
-                size="18"
-              ></lucide-icon>
-            </button>
-
-          </div>
-        </section>
-      </aside>
-
     </section>
+
+    <!-- Informação -->
+    <section
+      class="flex items-start gap-3 rounded-2xl border border-info/20 bg-info/5 px-4 py-3.5"
+    >
+      <lucide-icon
+        class="mt-0.5 shrink-0 text-info"
+        [img]="icons.info"
+        [size]="17"
+      />
+
+      <p class="text-sm leading-relaxed text-text-secondary">
+        As categorias ajudam a organizar suas receitas e despesas.
+        Escolha nomes e ícones que facilitem a identificação rápida
+        de cada transação.
+      </p>
+    </section>
+
   </div>
 }

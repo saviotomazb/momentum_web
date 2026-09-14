@@ -23,6 +23,7 @@ import {
   LucideAngularModule,
   Pencil,
   Plus,
+  Search,
   Shapes,
   ShoppingBasket,
   Trash2,
@@ -31,9 +32,14 @@ import {
 } from 'lucide-angular';
 
 import {
-  CategoryFormComponent,
-  CategoryFormData,
-} from '../../components/category-form/category-form';
+  CategoryCreateComponent,
+  CreateCategoryData,
+} from '../../components/category-create/category-create';
+
+import {
+  CategoryEditComponent,
+  EditCategoryData,
+} from '../../components/category-edit/category-edit';
 
 import { Category } from '../../models/category.model';
 import { CategoriesService } from '../../services/categories.service';
@@ -44,13 +50,16 @@ interface CategoryTip {
   icon: LucideIconData;
 }
 
+type CategoryFormMode = 'create' | 'edit' | null;
+
 @Component({
   selector: 'app-finance-categories',
   standalone: true,
   imports: [
     CommonModule,
     LucideAngularModule,
-    CategoryFormComponent,
+    CategoryCreateComponent,
+    CategoryEditComponent,
   ],
   templateUrl: './categories.html',
 })
@@ -59,20 +68,38 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   protected readonly categories = signal<Category[]>([]);
   protected readonly loading = signal(true);
-
-  protected readonly showForm = signal(false);
-  protected readonly editingCategory = signal<CategoryFormData | null>(null);
   protected readonly saving = signal(false);
+
+  protected readonly formMode =
+    signal<CategoryFormMode>(null);
+
+  protected readonly editingCategory =
+    signal<Category | null>(null);
+
+  protected readonly searchTerm = signal('');
+
+  protected readonly filteredCategories = computed(() => {
+    const search = this.searchTerm().trim().toLowerCase();
+
+    if (!search) {
+      return this.categories();
+    }
+
+    return this.categories().filter((category) =>
+      category.name.toLowerCase().includes(search),
+    );
+  });
 
   private tipIntervalId: ReturnType<typeof setInterval> | null = null;
 
   protected readonly icons = {
     chevronLeft: ChevronLeft,
     chevronRight: ChevronRight,
-    lightbulb: Lightbulb,
     info: Info,
+    lightbulb: Lightbulb,
     pencil: Pencil,
     plus: Plus,
+    search: Search,
     trash: Trash2,
   };
 
@@ -106,7 +133,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   ];
 
   protected readonly currentTip = computed(
-    () => this.tips[this.currentTipIndex()]
+    () => this.tips[this.currentTipIndex()],
   );
 
   private readonly iconMap: Record<string, LucideIconData> = {
@@ -129,79 +156,43 @@ export class CategoriesComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Abre o formulário para criação de uma nova categoria.
-   */
   protected openCreateForm(): void {
     this.editingCategory.set(null);
-    this.showForm.set(true);
+    this.formMode.set('create');
   }
 
-  /**
-   * Abre o formulário para edição da categoria selecionada.
-   */
   protected openEditForm(category: Category): void {
-    this.editingCategory.set({
-      id: category.id,
-      name: category.name,
-      color: category.color,
-      icon: category.icon,
-    });
-
-    this.showForm.set(true);
+    this.editingCategory.set(category);
+    this.formMode.set('edit');
   }
 
-  /**
-   * Fecha o formulário sem salvar alterações.
-   */
   protected closeForm(): void {
-    this.showForm.set(false);
+    this.formMode.set(null);
     this.editingCategory.set(null);
   }
 
-  /**
-   * Recebe os dados enviados pelo CategoryFormComponent
-   * e decide entre criação e atualização.
-   */
-  protected saveCategory(data: CategoryFormData): void {
+  protected createCategory(data: CreateCategoryData): void {
     this.saving.set(true);
 
-    if (data.id) {
-      this.updateCategory(data);
-      return;
-    }
+    this.categoriesService.create(data).subscribe({
+      next: (category) => {
+        this.categories.update((categories) => [
+          ...categories,
+          category,
+        ]);
 
-    this.createCategory(data);
+        this.saving.set(false);
+        this.closeForm();
+      },
+      error: (error) => {
+        console.error('Error creating category:', error);
+        this.saving.set(false);
+      },
+    });
   }
 
-  private createCategory(data: CategoryFormData): void {
-    this.categoriesService
-      .create({
-        name: data.name,
-        color: data.color,
-        icon: data.icon,
-      })
-      .subscribe({
-        next: (category) => {
-          this.categories.update((categories) => [
-            ...categories,
-            category,
-          ]);
-
-          this.saving.set(false);
-          this.closeForm();
-        },
-        error: (error) => {
-          console.error('Error creating category:', error);
-          this.saving.set(false);
-        },
-      });
-  }
-
-  private updateCategory(data: CategoryFormData): void {
-    if (!data.id) {
-      return;
-    }
+  protected updateCategory(data: EditCategoryData): void {
+    this.saving.set(true);
 
     this.categoriesService
       .update(data.id, {
@@ -215,8 +206,8 @@ export class CategoriesComponent implements OnInit, OnDestroy {
             categories.map((category) =>
               category.id === updatedCategory.id
                 ? updatedCategory
-                : category
-            )
+                : category,
+            ),
           );
 
           this.saving.set(false);
@@ -231,7 +222,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   protected deleteCategory(category: Category): void {
     const confirmed = window.confirm(
-      `Deseja realmente excluir a categoria "${category.name}"?`
+      `Deseja realmente excluir a categoria "${category.name}"?`,
     );
 
     if (!confirmed) {
@@ -242,14 +233,19 @@ export class CategoriesComponent implements OnInit, OnDestroy {
       next: () => {
         this.categories.update((categories) =>
           categories.filter(
-            (currentCategory) => currentCategory.id !== category.id
-          )
+            (currentCategory) =>
+              currentCategory.id !== category.id,
+          ),
         );
       },
       error: (error) => {
         console.error('Error deleting category:', error);
       },
     });
+  }
+
+  protected updateSearchTerm(value: string): void {
+    this.searchTerm.set(value);
   }
 
   private loadCategories(): void {
@@ -293,7 +289,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   protected previousTip(): void {
     this.currentTipIndex.update((index) =>
-      index === 0 ? this.tips.length - 1 : index - 1
+      index === 0 ? this.tips.length - 1 : index - 1,
     );
 
     this.restartTipRotation();
@@ -301,7 +297,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   protected nextTip(): void {
     this.currentTipIndex.update(
-      (index) => (index + 1) % this.tips.length
+      (index) => (index + 1) % this.tips.length,
     );
 
     this.restartTipRotation();
@@ -310,7 +306,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   private startTipRotation(): void {
     this.tipIntervalId = setInterval(() => {
       this.currentTipIndex.update(
-        (index) => (index + 1) % this.tips.length
+        (index) => (index + 1) % this.tips.length,
       );
     }, 10000);
   }

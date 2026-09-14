@@ -1,5 +1,4 @@
 <div class="mx-auto flex max-w-7xl flex-col gap-6 text-white">
-
   <!-- Cabeçalho -->
   <section
     class="app-shadow animate-fade-in flex flex-col gap-4 rounded-2xl border border-border bg-panel p-5 sm:flex-row sm:items-center sm:justify-between"
@@ -20,20 +19,16 @@
         ></lucide-icon>
 
         <span class="text-text-secondary">
-          {{ isEditMode() ? 'Editar categoria' : 'Nova categoria' }}
+          Nova categoria
         </span>
       </div>
 
       <h1 class="text-2xl font-black text-white">
-        {{ isEditMode() ? 'Editar categoria' : 'Nova categoria' }}
+        Nova categoria
       </h1>
 
       <p class="mt-1 text-sm text-text-secondary">
-        {{
-          isEditMode()
-            ? 'Atualize as informações da categoria abaixo.'
-            : 'Crie uma nova categoria para organizar suas transações.'
-        }}
+        Crie uma nova categoria para organizar suas transações.
       </p>
     </div>
 
@@ -53,14 +48,12 @@
 
   <!-- Conteúdo -->
   <section class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
-
     <!-- Formulário -->
     <form
       [formGroup]="form"
       class="app-shadow animate-fade-in rounded-2xl border border-border bg-panel p-5 sm:p-6"
       (ngSubmit)="saveCategory()"
     >
-
       <!-- Nome -->
       <div>
         <label
@@ -193,9 +186,7 @@
             [size]="17"
           ></lucide-icon>
 
-          <span>
-            {{ isEditMode() ? 'Salvar alterações' : 'Criar categoria' }}
-          </span>
+          <span>Criar categoria</span>
         </button>
       </div>
     </form>
@@ -218,7 +209,6 @@
         <!-- Card de preview -->
         <div class="mt-6 rounded-xl border border-border bg-surface p-4">
           <div class="flex items-center gap-4">
-
             <!-- Ícone -->
             <div
               class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full"
@@ -235,10 +225,7 @@
             <!-- Informações -->
             <div class="min-w-0">
               <p class="truncate text-sm font-bold text-white">
-                {{
-                  form.controls.name.value ||
-                  'Nome da categoria'
-                }}
+                {{ form.controls.name.value || 'Nome da categoria' }}
               </p>
 
               <div class="mt-1 flex items-center gap-2">
@@ -252,7 +239,6 @@
                 </span>
               </div>
             </div>
-
           </div>
         </div>
 
@@ -277,6 +263,5 @@
         </div>
       </section>
     </aside>
-
   </section>
 </div>
