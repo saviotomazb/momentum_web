@@ -1,31 +1,43 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   ArrowDown,
   ArrowUp,
-  BriefcaseBusiness,
+  BarChart3,
   Calendar,
   Car,
   ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-  CreditCard,
+  BriefcaseBusiness,
   House,
-  Landmark,
+  Layers,
   LucideAngularModule,
   Pencil,
   Plus,
   ReceiptText,
   Search,
+  Shapes,
   ShoppingCart,
   Trash2,
   Utensils,
   WalletCards,
   type LucideIconData,
 } from 'lucide-angular';
+
+import { Category } from '../../models/category.model';
+import {
+  Transaction,
+  TransactionFrequency,
+  TransactionType,
+} from '../../models/transaction.model';
+import { CategoriesService } from '../../services/categories.service';
+import { TransactionsService } from '../../services/transactions.service';
 
 interface TransactionSummary {
   label: string;
@@ -35,163 +47,180 @@ interface TransactionSummary {
   tone: 'success' | 'error' | 'info' | 'accent';
 }
 
-interface TransactionItem {
-  description: string;
-
-  category: {
-    name: string;
-    color: string;
-    icon: LucideIconData;
-  };
-
-  type: 'Receita' | 'Despesa';
-
-  value: number;
-
-  date: string;
-
-  paymentMethod: {
-    label: string;
-    icon: LucideIconData;
-  };
-}
-
 @Component({
   selector: 'app-finance-transactions',
   standalone: true,
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './transactions.html',
 })
-export class TransactionsComponent {
+export class TransactionsComponent implements OnInit, OnDestroy {
+  private readonly transactionsService = inject(TransactionsService);
+  private readonly categoriesService = inject(CategoriesService);
+
+  protected readonly TransactionType = TransactionType;
+
+  protected readonly transactions = signal<Transaction[]>([]);
+  protected readonly categories = signal<Category[]>([]);
+  protected readonly loading = signal(true);
+
+  protected readonly searchTerm = signal('');
+  protected readonly selectedType = signal<TransactionType | null>(null);
+  protected readonly selectedCategoryId = signal<string | null>(null);
+
+  protected readonly filteredTransactions = computed(() => {
+    const search = this.searchTerm().trim().toLowerCase();
+    const type = this.selectedType();
+    const categoryId = this.selectedCategoryId();
+
+    return this.transactions().filter((transaction) => {
+      const matchesSearch =
+        !search ||
+        transaction.description.toLowerCase().includes(search) ||
+        this.getCategoryName(transaction.categoryId).toLowerCase().includes(search);
+
+      const matchesType = type === null || transaction.type === type;
+
+      const matchesCategory =
+        categoryId === null || transaction.categoryId === categoryId;
+
+      return matchesSearch && matchesType && matchesCategory;
+    });
+  });
+
+  protected readonly summaries = computed<TransactionSummary[]>(() => {
+    const transactions = this.transactions();
+
+    const income = transactions
+      .filter((transaction) => transaction.type === TransactionType.Income)
+      .reduce((total, transaction) => total + transaction.amount, 0);
+
+    const expense = transactions
+      .filter((transaction) => transaction.type === TransactionType.Expense)
+      .reduce((total, transaction) => total + transaction.amount, 0);
+
+    const balance = income - expense;
+
+    return [
+      {
+        label: 'Receitas',
+        value: this.formatCurrency(income),
+        hint: 'Total registrado',
+        icon: ArrowUp,
+        tone: 'success',
+      },
+      {
+        label: 'Despesas',
+        value: this.formatCurrency(expense),
+        hint: 'Total registrado',
+        icon: ArrowDown,
+        tone: 'error',
+      },
+      {
+        label: 'Saldo',
+        value: this.formatCurrency(balance),
+        hint: 'Receitas - despesas',
+        icon: WalletCards,
+        tone: 'info',
+      },
+      {
+        label: 'Total de transações',
+        value: transactions.length.toString(),
+        hint: 'Total registrado',
+        icon: ReceiptText,
+        tone: 'accent',
+      },
+    ];
+  });
+
   protected readonly icons = {
     calendar: Calendar,
     chevronDown: ChevronDown,
-    chevronLeft: ChevronLeft,
-    chevronRight: ChevronRight,
-    chevronsLeft: ChevronsLeft,
-    chevronsRight: ChevronsRight,
     pencil: Pencil,
     plus: Plus,
     search: Search,
     trash: Trash2,
   };
 
-  protected readonly summaries: TransactionSummary[] = [
-    {
-      label: 'Receitas',
-      value: 'R$ 5.000,00',
-      hint: 'Este mês',
-      icon: ArrowUp,
-      tone: 'success',
-    },
-    {
-      label: 'Despesas',
-      value: 'R$ 2.800,00',
-      hint: 'Este mês',
-      icon: ArrowDown,
-      tone: 'error',
-    },
-    {
-      label: 'Saldo',
-      value: 'R$ 2.200,00',
-      hint: 'Este mês',
-      icon: WalletCards,
-      tone: 'info',
-    },
-    {
-      label: 'Total de transações',
-      value: '42',
-      hint: 'Este mês',
-      icon: ReceiptText,
-      tone: 'accent',
-    },
-  ];
+  private readonly iconMap: Record<string, LucideIconData> = {
+    utensils: Utensils,
+    car: Car,
+    house: House,
+    'shopping-cart': ShoppingCart,
+    briefcase: BriefcaseBusiness,
+    shapes: Shapes,
+  };
 
-  protected readonly transactions: TransactionItem[] = [
-    {
-      description: 'Almoço no restaurante',
-      category: {
-        name: 'Alimentação',
-        color: '#22C55E',
-        icon: Utensils,
-      },
-      type: 'Despesa',
-      value: 35.5,
-      date: '10/08/2026',
-      paymentMethod: {
-        label: 'Cartão de Débito',
-        icon: CreditCard,
-      },
-    },
-    {
-      description: 'Combustível',
-      category: {
-        name: 'Transporte',
-        color: '#3B82F6',
-        icon: Car,
-      },
-      type: 'Despesa',
-      value: 120,
-      date: '09/08/2026',
-      paymentMethod: {
-        label: 'Cartão de Crédito',
-        icon: CreditCard,
-      },
-    },
-    {
-      description: 'Salário',
-      category: {
-        name: 'Trabalho',
-        color: '#10B981',
-        icon: BriefcaseBusiness,
-      },
-      type: 'Receita',
-      value: 5000,
-      date: '05/08/2026',
-      paymentMethod: {
-        label: 'Conta Bancária',
-        icon: Landmark,
-      },
-    },
-    {
-      description: 'Supermercado',
-      category: {
-        name: 'Alimentação',
-        color: '#22C55E',
-        icon: ShoppingCart,
-      },
-      type: 'Despesa',
-      value: 86.3,
-      date: '04/08/2026',
-      paymentMethod: {
-        label: 'Cartão de Débito',
-        icon: CreditCard,
-      },
-    },
-    {
-      description: 'Aluguel',
-      category: {
-        name: 'Moradia',
-        color: '#F59E0B',
-        icon: House,
-      },
-      type: 'Despesa',
-      value: 900,
-      date: '01/08/2026',
-      paymentMethod: {
-        label: 'Transferência',
-        icon: Landmark,
-      },
-    },
-  ];
+  ngOnInit(): void {
+    this.loadCategories();
+    this.loadTransactions();
+  }
 
-  protected readonly pageItems: Array<number | 'ellipsis'> = [
-    1,
-    2,
-    3,
-    'ellipsis',
-    9,
-  ];
+  ngOnDestroy(): void {}
+
+  protected updateSearchTerm(value: string): void {
+    this.searchTerm.set(value);
+  }
+
+  protected selectType(type: TransactionType | null): void {
+    this.selectedType.set(type);
+  }
+
+  protected selectCategory(categoryId: string | null): void {
+    this.selectedCategoryId.set(categoryId);
+  }
+
+  protected clearFilters(): void {
+    this.searchTerm.set('');
+    this.selectedType.set(null);
+    this.selectedCategoryId.set(null);
+  }
+
+  protected getCategoryName(categoryId: string): string {
+    return (
+      this.categories().find((category) => category.id === categoryId)?.name ??
+      'Sem categoria'
+    );
+  }
+
+  protected getCategoryColor(categoryId: string): string {
+    return (
+      this.categories().find((category) => category.id === categoryId)?.color ??
+      '#64748B'
+    );
+  }
+
+  protected getCategoryIcon(categoryId: string): LucideIconData {
+    const iconName = this.categories().find(
+      (category) => category.id === categoryId,
+    )?.icon;
+
+    return this.iconMap[iconName ?? ''] ?? Shapes;
+  }
+
+  protected getTypeLabel(type: TransactionType): string {
+    return type === TransactionType.Income ? 'Receita' : 'Despesa';
+  }
+
+  protected getFrequencyLabel(frequency: TransactionFrequency): string {
+    return frequency === TransactionFrequency.OneTime
+      ? 'Única'
+      : 'Recorrente';
+  }
+
+  protected typeIcon(type: TransactionType): LucideIconData {
+    return type === TransactionType.Income ? ArrowUp : ArrowDown;
+  }
+
+  protected formatCurrency(value: number): string {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value);
+  }
+
+  protected formatDate(date: string): string {
+    return new Intl.DateTimeFormat('pt-BR').format(new Date(date));
+  }
 
   protected summaryToneClasses(
     tone: TransactionSummary['tone'],
@@ -206,16 +235,29 @@ export class TransactionsComponent {
     return classes[tone];
   }
 
-  protected typeIcon(
-    type: TransactionItem['type'],
-  ): LucideIconData {
-    return type === 'Receita' ? ArrowUp : ArrowDown;
+  private loadTransactions(): void {
+    this.loading.set(true);
+
+    this.transactionsService.getAll().subscribe({
+      next: (transactions) => {
+        this.transactions.set(transactions);
+        this.loading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading transactions:', error);
+        this.loading.set(false);
+      },
+    });
   }
 
-  protected formatCurrency(value: number): string {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(value);
+  private loadCategories(): void {
+    this.categoriesService.getAll().subscribe({
+      next: (categories) => {
+        this.categories.set(categories);
+      },
+      error: (error) => {
+        console.error('Error loading categories:', error);
+      },
+    });
   }
 }
