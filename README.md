@@ -1,12 +1,16 @@
-# Momentum Web
+<div align="center">
 
-<p align="center">
-  <img src="public/logo/logo-wordmark.webp" alt="Momentum Wordmark" width="700">
-</p>
+  <img src="public/logo/logo-wordmark.webp" alt="Momentum Wordmark" width="300">
+
+</div>
+
+<hr>
+
+<div align="center">
 
 Frontend da aplicação **Momentum**, desenvolvido com **Angular**, responsável por fornecer uma interface moderna, intuitiva e responsiva para o gerenciamento de hábitos, tarefas e acompanhamento da evolução do usuário.
 
----
+</div>
 
 ## 📖 Sobre o Projeto
 
@@ -15,8 +19,6 @@ O **Momentum Web** é a aplicação frontend do ecossistema **Momentum**.
 Seu objetivo é oferecer uma experiência intuitiva e agradável para que os usuários possam gerenciar seus hábitos, tarefas e finanças, acompanhar sua evolução e utilizar os recursos disponibilizados pela **Momentum API**.
 
 A aplicação foi desenvolvida utilizando as tecnologias mais recentes do ecossistema Angular, seguindo boas práticas de organização, componentização e escalabilidade.
-
----
 
 ## ✨ Funcionalidades
 
@@ -33,8 +35,6 @@ A aplicação foi desenvolvida utilizando as tecnologias mais recentes do ecossi
 
 * 📋 Gerenciamento de tarefas
 * 💰 Gerenciamento financeiro
-
----
 
 ## 🛠️ Stack
 
@@ -77,8 +77,6 @@ A aplicação foi desenvolvida utilizando as tecnologias mais recentes do ecossi
 
 * Prettier
 
----
-
 ## 📁 Estrutura do Projeto
 
 ```text
@@ -90,8 +88,6 @@ src/
 ```
 
 > A organização das pastas segue uma arquitetura modular, visando facilitar a manutenção, escalabilidade e reutilização dos componentes.
-
----
 
 ## 🚀 Como Executar
 
@@ -133,8 +129,6 @@ A aplicação estará disponível em:
 http://localhost:4200
 ```
 
----
-
 ## ⚙️ Configuração
 
 Antes de iniciar a aplicação, configure a URL da API no arquivo de ambiente correspondente.
@@ -148,8 +142,6 @@ export const environment = {
 };
 ```
 
----
-
 ## 📜 Scripts Disponíveis
 
 | Comando          | Descrição                                                 |
@@ -160,13 +152,9 @@ export const environment = {
 | `npm test`       | Executa os testes automatizados                           |
 | `npm run format` | Formata o código utilizando Prettier *(caso configurado)* |
 
----
-
 ## 🔗 Projetos Relacionados
 
 - **[Momentum API](https://github.com/saviotomazb/momentum_api.git)** — Backend responsável pelas regras de negócio, autenticação, persistência dos dados e disponibilização da API REST.
-
----
 
 ## 🤝 Contribuindo
 
