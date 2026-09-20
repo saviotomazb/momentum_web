@@ -51,10 +51,22 @@ export const routes: Routes = [
           },
           {
             path: 'transactions',
-            loadComponent: () =>
-              import('./features/finances/pages/transactions/transactions').then(
-                (m) => m.TransactionsComponent,
-              ),
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./features/finances/pages/transactions/transactions').then(
+                    (m) => m.TransactionsComponent,
+                  ),
+              },
+              {
+                path: 'create',
+                loadComponent: () =>
+                  import(
+                    './features/finances/components/transaction-create/transaction-create'
+                  ).then((m) => m.TransactionCreateComponent),
+              },
+            ],
           },
           {
             path: 'categories',

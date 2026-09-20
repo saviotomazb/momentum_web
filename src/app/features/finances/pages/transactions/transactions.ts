@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import {
   Component,
   OnDestroy,
@@ -27,6 +28,7 @@ import {
   Trash2,
   Utensils,
   WalletCards,
+  ChevronRight,
   type LucideIconData,
 } from 'lucide-angular';
 
@@ -50,7 +52,7 @@ interface TransactionSummary {
 @Component({
   selector: 'app-finance-transactions',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, RouterLink],
   templateUrl: './transactions.html',
 })
 export class TransactionsComponent implements OnInit, OnDestroy {
@@ -139,6 +141,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
     plus: Plus,
     search: Search,
     trash: Trash2,
+    chevronRight: ChevronRight,
   };
 
   private readonly iconMap: Record<string, LucideIconData> = {

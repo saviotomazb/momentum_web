@@ -3,18 +3,32 @@
   <section
     class="app-shadow animate-fade-in flex flex-col gap-4 rounded-2xl border border-border bg-panel p-5 sm:flex-row sm:items-center sm:justify-between"
   >
-    <div>
-      <h1 class="text-2xl font-black text-white">
-        Transações
-      </h1>
+      <div>
+        <div class="mb-2 flex items-center gap-2 text-sm text-text-tertiary">
+          <span>Finanças</span>
 
-      <p class="mt-1 text-sm text-text-secondary">
-        Gerencie suas receitas e despesas.
-      </p>
-    </div>
+          <lucide-icon
+            [img]="icons.chevronRight"
+            [size]="14"
+          />
+
+          <span class="text-text-secondary">
+            Transações
+          </span>
+        </div>
+
+        <h1 class="text-2xl font-black text-white">
+          Transações
+        </h1>
+
+        <p class="mt-1 text-sm text-text-secondary">
+          Gerencie suas receitas e despesas.
+        </p>
+      </div>
 
     <button
       type="button"
+      routerLink="/finances/transactions/create"
       class="flex h-10 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-bold text-white transition hover:bg-primary-hover active:bg-primary-active"
     >
       <lucide-icon
@@ -191,6 +205,7 @@
 
         <button
           type="button"
+          routerLink="/finances/transactions/create"
           class="mt-5 flex h-10 items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-bold text-white transition hover:bg-primary-hover active:bg-primary-active"
         >
           <lucide-icon
