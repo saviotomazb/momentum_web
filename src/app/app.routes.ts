@@ -55,9 +55,9 @@ export const routes: Routes = [
               {
                 path: '',
                 loadComponent: () =>
-                  import('./features/finances/pages/transactions/transactions').then(
-                    (m) => m.TransactionsComponent,
-                  ),
+                  import(
+                    './features/finances/pages/transactions/transactions'
+                  ).then((m) => m.TransactionsComponent),
               },
               {
                 path: 'create',
@@ -65,6 +65,13 @@ export const routes: Routes = [
                   import(
                     './features/finances/components/transaction-create/transaction-create'
                   ).then((m) => m.TransactionCreateComponent),
+              },
+              {
+                path: 'edit/:id',
+                loadComponent: () =>
+                  import(
+                    './features/finances/components/transaction-edit/transaction-edit'
+                  ).then((m) => m.TransactionEditComponent),
               },
             ],
           },
