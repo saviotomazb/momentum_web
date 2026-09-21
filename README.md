@@ -30,10 +30,10 @@ A aplicação foi desenvolvida utilizando as tecnologias mais recentes do ecossi
 * 📈 Acompanhamento do progresso do usuário
 * 📱 Interface responsiva para diferentes dispositivos
 * 🔄 Integração com a **Momentum API**
+* 📋 Gerenciamento de tarefas
 
 ### 🚧 Em desenvolvimento
 
-* 📋 Gerenciamento de tarefas
 * 💰 Gerenciamento financeiro
 
 ## 🛠️ Stack
