@@ -1,17 +1,25 @@
 import { Component, computed, inject, signal } from '@angular/core';
+
 import { RouterLink } from '@angular/router';
 
 import { ErrorNotificationService } from '../../../core/services/error-notification.service';
 
 import { Task, TaskStatus } from '../models/task.model';
+
 import { TaskList } from '../models/task-list.model';
 
+import { Subtask } from '../models/subtask.model';
+
 import { TaskListsService } from '../services/task-lists.service';
+
 import { TasksService } from '../services/tasks.service';
+
+import { SubtasksService } from '../services/subtasks.service';
 
 interface TaskListViewModel {
   list: TaskList;
   tasks: Task[];
+  subtasksByTask: Record<string, Subtask[]>;
 }
 
 @Component({
@@ -23,6 +31,8 @@ interface TaskListViewModel {
 export class TasksComponent {
   private readonly taskListsService = inject(TaskListsService);
   private readonly tasksService = inject(TasksService);
+  private readonly subtasksService = inject(SubtasksService);
+
   private readonly notificationService = inject(
     ErrorNotificationService,
   );
@@ -84,6 +94,12 @@ export class TasksComponent {
     return this.getCompletedTasks(tasks).length;
   }
 
+  protected getCompletedSubtaskCount(subtasks: Subtask[]): number {
+    return subtasks.filter((subtask) =>
+      this.isSubtaskCompleted(subtask),
+    ).length;
+  }
+
   protected getProgress(tasks: Task[]): number {
     if (tasks.length === 0) {
       return 0;
@@ -94,18 +110,37 @@ export class TasksComponent {
     );
   }
 
+  protected getSubtaskProgress(subtasks: Subtask[]): number {
+    if (subtasks.length === 0) {
+      return 0;
+    }
+
+    const completedCount = subtasks.filter((subtask) =>
+      this.isSubtaskCompleted(subtask),
+    ).length;
+
+    return Math.round((completedCount / subtasks.length) * 100);
+  }
+
   protected isCompleted(task: Task): boolean {
     return task.status === TaskStatus.Completed;
+  }
+
+  protected isSubtaskCompleted(subtask: Subtask): boolean {
+    return subtask.status === TaskStatus.Completed;
   }
 
   protected getPriorityLabel(priority: number): string {
     switch (priority) {
       case 1:
         return 'Baixa';
+
       case 2:
         return 'Média';
+
       case 3:
         return 'Alta';
+
       default:
         return 'Sem prioridade';
     }
@@ -151,11 +186,11 @@ export class TasksComponent {
         this.loadTasks(lists);
       },
 
-      error: (error) => {
+      error: () => {
         this.loading.set(false);
 
         this.notificationService.error(
-            'Não foi possível carregar suas listas.',
+          'Não foi possível carregar suas listas.',
         );
       },
     });
@@ -169,59 +204,178 @@ export class TasksComponent {
     }
 
     let completedRequests = 0;
+
     const result: TaskListViewModel[] = [];
 
     lists.forEach((list) => {
       this.tasksService.getByTaskListId(list.id).subscribe({
         next: (tasks) => {
-          result.push({
-            list,
-            tasks,
-          });
+          if (tasks.length === 0) {
+            result.push({
+              list,
+              tasks,
+              subtasksByTask: {},
+            });
 
-          completedRequests++;
+            completedRequests++;
 
-          if (completedRequests === lists.length) {
-            this.tasksByList.set(
-              lists.map(
-                (currentList) =>
-                  result.find(
-                    ({ list: resultList }) =>
-                      resultList.id === currentList.id,
-                  ) ?? {
-                    list: currentList,
-                    tasks: [],
-                  },
-              ),
-            );
+            if (completedRequests === lists.length) {
+              this.setTasksByList(lists, result);
+            }
 
-            this.loading.set(false);
+            return;
           }
+
+          let completedSubtaskRequests = 0;
+
+          const subtasksByTask: Record<string, Subtask[]> = {};
+
+          tasks.forEach((task) => {
+            this.subtasksService
+              .getAllByTaskId(task.id)
+              .subscribe({
+                next: (subtasks) => {
+                  subtasksByTask[task.id] = subtasks;
+
+                  completedSubtaskRequests++;
+
+                  if (
+                    completedSubtaskRequests === tasks.length
+                  ) {
+                    result.push({
+                      list,
+                      tasks,
+                      subtasksByTask,
+                    });
+
+                    completedRequests++;
+
+                    if (
+                      completedRequests === lists.length
+                    ) {
+                      this.setTasksByList(lists, result);
+                    }
+                  }
+                },
+
+                error: () => {
+                  subtasksByTask[task.id] = [];
+
+                  completedSubtaskRequests++;
+
+                  if (
+                    completedSubtaskRequests === tasks.length
+                  ) {
+                    result.push({
+                      list,
+                      tasks,
+                      subtasksByTask,
+                    });
+
+                    completedRequests++;
+
+                    if (
+                      completedRequests === lists.length
+                    ) {
+                      this.setTasksByList(lists, result);
+                    }
+                  }
+
+                  this.notificationService.error(
+                    `Não foi possível carregar as subtarefas da tarefa "${task.title}".`,
+                  );
+                },
+              });
+          });
         },
 
-        error: (error) => {
+        error: () => {
           completedRequests++;
 
           if (completedRequests === lists.length) {
-            this.tasksByList.set(
-              lists.map((currentList) => ({
-                list: currentList,
-                tasks:
-                  result.find(
-                    ({ list: resultList }) =>
-                      resultList.id === currentList.id,
-                  )?.tasks ?? [],
-              })),
-            );
-
-            this.loading.set(false);
+            this.setTasksByList(lists, result);
           }
 
           this.notificationService.error(
-              `Não foi possível carregar as tarefas da lista "${list.name}".`,
+            `Não foi possível carregar as tarefas da lista "${list.name}".`,
           );
         },
       });
     });
+  }
+
+  private setTasksByList(
+    lists: TaskList[],
+    result: TaskListViewModel[],
+  ): void {
+    this.tasksByList.set(
+      lists.map(
+        (currentList) =>
+          result.find(
+            ({ list: resultList }) =>
+              resultList.id === currentList.id,
+          ) ?? {
+            list: currentList,
+            tasks: [],
+            subtasksByTask: {},
+          },
+      ),
+    );
+
+    this.loading.set(false);
+  }
+
+  private updateSubtaskInState(updatedSubtask: Subtask): void {
+    this.tasksByList.update((viewModels) =>
+      viewModels.map((viewModel) => {
+        const subtasks =
+          viewModel.subtasksByTask[updatedSubtask.taskId];
+
+        if (!subtasks) {
+          return viewModel;
+        }
+
+        return {
+          ...viewModel,
+
+          subtasksByTask: {
+            ...viewModel.subtasksByTask,
+
+            [updatedSubtask.taskId]: subtasks.map((subtask) =>
+              subtask.id === updatedSubtask.id
+                ? updatedSubtask
+                : subtask,
+            ),
+          },
+        };
+      }),
+    );
+  }
+
+  protected toggleSubtask(subtask: Subtask): void {
+    const status = this.isSubtaskCompleted(subtask)
+      ? TaskStatus.Pending
+      : TaskStatus.Completed;
+
+    this.subtasksService
+      .update(subtask.id, {
+        title: subtask.title,
+        description: subtask.description,
+        status,
+        priority: subtask.priority,
+        scheduledDate: subtask.scheduledDate,
+        dueDate: subtask.dueDate,
+      })
+      .subscribe({
+        next: (updatedSubtask) => {
+          this.updateSubtaskInState(updatedSubtask);
+        },
+
+        error: () => {
+          this.notificationService.error(
+            `Não foi possível atualizar a subtarefa "${subtask.title}".`,
+          );
+        },
+      });
   }
 }

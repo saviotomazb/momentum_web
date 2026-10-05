@@ -57,9 +57,7 @@
         </div>
       </div>
 
-      <div
-        class="flex flex-wrap gap-3 p-5"
-      >
+      <div class="flex flex-wrap gap-3 p-5">
         @for (list of taskLists(); track list.id) {
           <label
             class="flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 transition"
@@ -108,12 +106,8 @@
         </p>
       </section>
     } @else {
-      <section
-        class="overflow-x-auto pb-2"
-      >
-        <div
-          class="flex min-w-max gap-4"
-        >
+      <section class="overflow-x-auto pb-2">
+        <div class="flex min-w-max gap-4">
           @for (
             viewModel of visibleTaskLists();
             track viewModel.list.id
@@ -121,12 +115,8 @@
             <article
               class="app-shadow w-[360px] shrink-0 overflow-hidden rounded-2xl border border-border bg-panel"
             >
-              <div
-                class="border-b border-border p-5"
-              >
-                <div
-                  class="flex items-start justify-between gap-4"
-                >
+              <div class="border-b border-border p-5">
+                <div class="flex items-start justify-between gap-4">
                   <div class="min-w-0">
                     <h2
                       class="truncate text-lg font-black text-white"
@@ -203,9 +193,7 @@
                           />
 
                           <div class="min-w-0 flex-1">
-                            <p
-                              class="text-sm font-bold text-white"
-                            >
+                            <p class="text-sm font-bold text-white">
                               {{ task.title }}
                             </p>
 
@@ -227,6 +215,15 @@
                                 {{ getPriorityLabel(task.priority) }}
                               </span>
 
+                              @if (task.scheduledDate) {
+                                <span
+                                  class="text-[11px] font-semibold text-text-tertiary"
+                                >
+                                  Agendada para
+                                  {{ formatDate(task.scheduledDate) }}
+                                </span>
+                              }
+
                               @if (task.dueDate) {
                                 <span
                                   class="text-[11px] font-semibold text-text-tertiary"
@@ -235,6 +232,131 @@
                                 </span>
                               }
                             </div>
+
+                            @if (
+                              viewModel.subtasksByTask[task.id]?.length
+                            ) {
+                              <div
+                                class="mt-4 border-t border-border pt-3"
+                              >
+                                <p
+                                  class="mb-2 text-[11px] font-black uppercase tracking-[0.08em] text-text-tertiary"
+                                >
+                                  Subtarefas
+                                </p>
+
+                                <div
+                                  class="mb-3 flex items-center justify-between"
+                                >
+                                  <span
+                                    class="text-[11px] font-black uppercase tracking-[0.08em] text-text-tertiary"
+                                  >
+                                    Progresso
+                                  </span>
+
+                                  <span
+                                    class="text-[11px] font-bold text-text-secondary"
+                                  >
+                                    {{
+                                      getCompletedSubtaskCount(
+                                        viewModel.subtasksByTask[task.id]
+                                      )
+                                    }}/{{ viewModel.subtasksByTask[task.id].length }}
+                                  </span>
+                                </div>
+
+                                <div
+                                  class="mb-3 h-1.5 overflow-hidden rounded-full bg-surface"
+                                >
+                                  <div
+                                    class="h-full rounded-full bg-primary transition-all duration-300"
+                                    [style.width.%]="
+                                      getSubtaskProgress(
+                                        viewModel.subtasksByTask[task.id]
+                                      )
+                                    "
+                                  ></div>
+                                </div>
+
+                                <div class="flex flex-col gap-2">
+                                  @for (
+                                    subtask of viewModel.subtasksByTask[task.id];
+                                    track subtask.id
+                                  ) {
+                                    <div
+                                      class="rounded-lg border border-border bg-panel px-3 py-2"
+                                    >
+                                      <div class="flex gap-2">
+                                        <input
+                                          type="checkbox"
+                                          class="mt-0.5 h-3.5 w-3.5 shrink-0 accent-primary"
+                                          [checked]="isSubtaskCompleted(subtask)"
+                                          (change)="toggleSubtask(subtask)"
+                                        />
+
+                                        <div class="min-w-0 flex-1">
+                                          <p
+                                            class="text-xs font-bold text-white"
+                                            [class.text-text-tertiary]="isSubtaskCompleted(subtask)"
+                                            [class.line-through]="isSubtaskCompleted(subtask)"
+                                          >
+                                            {{ subtask.title }}
+                                          </p>
+
+                                          @if (subtask.description) {
+                                            <p
+                                              class="mt-1 text-[11px] text-text-secondary"
+                                            >
+                                              {{ subtask.description }}
+                                            </p>
+                                          }
+
+                                          <div
+                                            class="mt-2 flex flex-wrap items-center gap-2"
+                                          >
+                                            <span
+                                              class="rounded-md border px-2 py-1 text-[10px] font-bold"
+                                              [class]="getPriorityClass(subtask.priority)"
+                                            >
+                                              {{
+                                                getPriorityLabel(
+                                                  subtask.priority
+                                                )
+                                              }}
+                                            </span>
+
+                                            @if (subtask.scheduledDate) {
+                                              <span
+                                                class="text-[10px] font-semibold text-text-tertiary"
+                                              >
+                                                {{
+                                                  formatDate(
+                                                    subtask.scheduledDate
+                                                  )
+                                                }}
+                                              </span>
+                                            }
+
+                                            @if (subtask.dueDate) {
+                                              <span
+                                                class="text-[10px] font-semibold text-text-tertiary"
+                                              >
+                                                Até
+                                                {{
+                                                  formatDate(
+                                                    subtask.dueDate
+                                                  )
+                                                }}
+                                              </span>
+                                            }
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  }
+                                </div>
+                              </div>
+                            }
                           </div>
                         </div>
                       </article>
@@ -281,6 +403,82 @@
                                     >
                                       {{ formatDate(task.dueDate) }}
                                     </p>
+                                  }
+
+                                  @if (
+                                    viewModel.subtasksByTask[task.id]?.length
+                                  ) {
+                                    <div
+                                      class="mt-3 border-t border-border pt-3"
+                                    >
+                                      <p
+                                        class="mb-2 text-[11px] font-black uppercase tracking-[0.08em] text-text-tertiary"
+                                      >
+                                        Subtarefas
+                                      </p>
+
+                                      <div
+                                        class="mb-3 flex items-center justify-between"
+                                      >
+                                        <span
+                                          class="text-[11px] font-black uppercase tracking-[0.08em] text-text-tertiary"
+                                        >
+                                          Progresso
+                                        </span>
+
+                                        <span
+                                          class="text-[11px] font-bold text-text-secondary"
+                                        >
+                                          {{
+                                            getCompletedSubtaskCount(
+                                              viewModel.subtasksByTask[task.id]
+                                            )
+                                          }}/{{ viewModel.subtasksByTask[task.id].length }}
+                                        </span>
+                                      </div>
+
+                                      <div
+                                        class="mb-3 h-1.5 overflow-hidden rounded-full bg-surface"
+                                      >
+                                        <div
+                                          class="h-full rounded-full bg-primary transition-all duration-300"
+                                          [style.width.%]="
+                                            getSubtaskProgress(
+                                              viewModel.subtasksByTask[task.id]
+                                            )
+                                          "
+                                        ></div>
+                                      </div>
+
+                                      <div class="flex flex-col gap-2">
+                                        @for (
+                                          subtask of viewModel.subtasksByTask[task.id];
+                                          track subtask.id
+                                        ) {
+                                          <div
+                                            class="rounded-lg border border-border bg-panel px-3 py-2"
+                                          >
+                                            <div class="flex gap-2">
+                                              <input
+                                                type="checkbox"
+                                                class="mt-0.5 h-3.5 w-3.5 shrink-0 accent-primary"
+                                                [checked]="isSubtaskCompleted(subtask)"
+                                                (change)="toggleSubtask(subtask)"
+                                              />
+
+                                              <div class="min-w-0 flex-1">
+                                                <p
+                                                  class="text-xs font-bold text-text-tertiary"
+                                                  [class.line-through]="isSubtaskCompleted(subtask)"
+                                                >
+                                                  {{ subtask.title }}
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        }
+                                      </div>
+                                    </div>
                                   }
                                 </div>
                               </div>
