@@ -2,8 +2,10 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { ErrorNotificationService } from '../../../core/services/error-notification.service';
-import { Task } from '../models/task.model';
+
+import { Task, TaskStatus } from '../models/task.model';
 import { TaskList } from '../models/task-list.model';
+
 import { TaskListsService } from '../services/task-lists.service';
 import { TasksService } from '../services/tasks.service';
 
@@ -27,20 +29,8 @@ export class TasksComponent {
 
   protected readonly taskLists = signal<TaskList[]>([]);
   protected readonly tasksByList = signal<TaskListViewModel[]>([]);
-
-  protected readonly selectedListIds = signal<Set<string>>(
-    new Set(),
-  );
-
+  protected readonly selectedListIds = signal<Set<string>>(new Set());
   protected readonly loading = signal(true);
-
-  protected readonly selectedLists = computed(() => {
-    const selectedIds = this.selectedListIds();
-
-    return this.taskLists().filter((list) =>
-      selectedIds.has(list.id),
-    );
-  });
 
   protected readonly visibleTaskLists = computed(() => {
     const selectedIds = this.selectedListIds();
@@ -82,14 +72,6 @@ export class TasksComponent {
     this.selectedListIds.set(new Set());
   }
 
-  protected getTasks(listId: string): Task[] {
-    return (
-      this.tasksByList().find(
-        ({ list }) => list.id === listId,
-      )?.tasks ?? []
-    );
-  }
-
   protected getPendingTasks(tasks: Task[]): Task[] {
     return tasks.filter((task) => !this.isCompleted(task));
   }
@@ -113,20 +95,17 @@ export class TasksComponent {
   }
 
   protected isCompleted(task: Task): boolean {
-    return task.status === 3;
+    return task.status === TaskStatus.Completed;
   }
 
   protected getPriorityLabel(priority: number): string {
     switch (priority) {
       case 1:
         return 'Baixa';
-
       case 2:
         return 'Média';
-
       case 3:
         return 'Alta';
-
       default:
         return 'Sem prioridade';
     }
@@ -158,13 +137,6 @@ export class TasksComponent {
     );
   }
 
-  protected trackByList(
-    _: number,
-    item: TaskListViewModel,
-  ): string {
-    return item.list.id;
-  }
-
   private loadTaskLists(): void {
     this.loading.set(true);
 
@@ -183,7 +155,6 @@ export class TasksComponent {
         this.loading.set(false);
 
         this.notificationService.error(
-          error?.error?.message ??
             'Não foi possível carregar suas listas.',
         );
       },
@@ -194,12 +165,10 @@ export class TasksComponent {
     if (lists.length === 0) {
       this.tasksByList.set([]);
       this.loading.set(false);
-
       return;
     }
 
     let completedRequests = 0;
-
     const result: TaskListViewModel[] = [];
 
     lists.forEach((list) => {
@@ -249,7 +218,6 @@ export class TasksComponent {
           }
 
           this.notificationService.error(
-            error?.error?.message ??
               `Não foi possível carregar as tarefas da lista "${list.name}".`,
           );
         },
