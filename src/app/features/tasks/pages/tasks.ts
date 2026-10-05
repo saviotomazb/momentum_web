@@ -2,10 +2,8 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { ErrorNotificationService } from '../../../core/services/error-notification.service';
-
 import { Task } from '../models/task.model';
 import { TaskList } from '../models/task-list.model';
-
 import { TaskListsService } from '../services/task-lists.service';
 import { TasksService } from '../services/tasks.service';
 
@@ -115,13 +113,6 @@ export class TasksComponent {
   }
 
   protected isCompleted(task: Task): boolean {
-    /*
-     * Ajustaremos esta comparação quando consolidarmos
-     * os valores do enum TaskStatus no frontend.
-     *
-     * Por enquanto, o status "Completed" é considerado
-     * o valor 3.
-     */
     return task.status === 3;
   }
 
@@ -187,6 +178,7 @@ export class TasksComponent {
 
         this.loadTasks(lists);
       },
+
       error: (error) => {
         this.loading.set(false);
 
@@ -202,10 +194,12 @@ export class TasksComponent {
     if (lists.length === 0) {
       this.tasksByList.set([]);
       this.loading.set(false);
+
       return;
     }
 
     let completedRequests = 0;
+
     const result: TaskListViewModel[] = [];
 
     lists.forEach((list) => {
@@ -235,6 +229,7 @@ export class TasksComponent {
             this.loading.set(false);
           }
         },
+
         error: (error) => {
           completedRequests++;
 
