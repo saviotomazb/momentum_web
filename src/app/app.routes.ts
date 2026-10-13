@@ -24,7 +24,34 @@ export const routes: Routes = [
     children: [
       {
         path: 'tasks',
-        loadComponent: () => import('./features/tasks/pages/tasks').then((m) => m.TasksComponent),
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./features/tasks/pages/tasks').then(
+                (m) => m.TasksComponent,
+              ),
+          },
+          {
+            path: 'lists',
+            children: [
+              {
+                path: 'create',
+                loadComponent: () =>
+                  import(
+                    './features/tasks/components/task-list-form/task-list-form'
+                  ).then((m) => m.TaskListFormComponent),
+              },
+              {
+                path: 'edit/:id',
+                loadComponent: () =>
+                  import(
+                    './features/tasks/components/task-list-form/task-list-form'
+                  ).then((m) => m.TaskListFormComponent),
+              },
+            ],
+          },
+        ],
       },
       {
         path: 'habits',
