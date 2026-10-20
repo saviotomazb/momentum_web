@@ -33,6 +33,20 @@ export const routes: Routes = [
               ),
           },
           {
+            path: 'create/:listId',
+            loadComponent: () =>
+              import(
+                './features/tasks/components/task-form/task-form'
+              ).then((m) => m.TaskFormComponent),
+          },
+          {
+            path: 'edit/:id',
+            loadComponent: () =>
+              import(
+                './features/tasks/components/task-form/task-form'
+              ).then((m) => m.TaskFormComponent),
+          },
+          {
             path: 'lists',
             children: [
               {

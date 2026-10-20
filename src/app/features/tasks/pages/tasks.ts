@@ -50,8 +50,28 @@ export class TasksComponent {
     );
   });
 
+  protected readonly editingListIds = signal<Set<string>>(new Set());
+
   constructor() {
     this.loadTaskLists();
+  }
+
+  protected isListEditing(id: string): boolean {
+  return this.editingListIds().has(id);
+  }
+
+  protected toggleListEditing(id: string): void {
+    this.editingListIds.update((currentIds) => {
+      const nextIds = new Set(currentIds);
+
+      if (nextIds.has(id)) {
+        nextIds.delete(id);
+      } else {
+        nextIds.add(id);
+      }
+
+      return nextIds;
+    });
   }
 
   protected isListSelected(id: string): boolean {
