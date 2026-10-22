@@ -16,6 +16,8 @@ import { TasksService } from '../services/tasks.service';
 
 import { SubtasksService } from '../services/subtasks.service';
 
+import { TaskCardComponent } from '../components/task-card/task-card';
+
 interface TaskListViewModel {
   list: TaskList;
   tasks: Task[];
@@ -25,7 +27,7 @@ interface TaskListViewModel {
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, TaskCardComponent],
   templateUrl: './tasks.html',
 })
 export class TasksComponent {

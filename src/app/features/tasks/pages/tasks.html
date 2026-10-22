@@ -126,7 +126,7 @@
       }
     </section>
 
-    @if (visibleTaskLists().length === 0) {
+    <!-- @if (visibleTaskLists().length === 0) {
       <section
         class="app-shadow flex min-h-64 flex-col items-center justify-center rounded-2xl border border-border bg-panel px-5 text-center"
       >
@@ -589,6 +589,37 @@
                 }
               </div>
             </article>
+          }
+        </div>
+      </section>
+    } -->
+
+    @if (visibleTaskLists().length === 0) {
+      <section
+        class="app-shadow flex min-h-64 flex-col items-center justify-center rounded-2xl border border-border bg-panel px-5 text-center"
+      >
+        <h2 class="text-base font-black text-white">
+          Nenhuma lista selecionada
+        </h2>
+
+        <p class="mt-1 max-w-md text-sm text-text-secondary">
+          Selecione pelo menos uma lista em "Minhas listas" para visualizar suas tarefas.
+        </p>
+      </section>
+    } @else {
+      <section class="overflow-x-auto pb-2">
+        <div class="flex min-w-max gap-4">
+          @for (
+            viewModel of visibleTaskLists();
+            track viewModel.list.id
+          ) {
+            <app-task-card
+              class="block w-[360px] shrink-0"
+              [viewModel]="viewModel"
+              [editing]="isListEditing(viewModel.list.id)"
+              (toggleEditing)="toggleListEditing($event)"
+              (toggleSubtask)="toggleSubtask($event)"
+            />
           }
         </div>
       </section>
